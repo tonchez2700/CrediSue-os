@@ -101,35 +101,31 @@ const signout = (dispatch) => {
 }
 
 const tryAuth = async (email, password, dispatch) => {
+    dispatch({ type: 'FETCHING_DATA', payload: { fetchingData: true } });
+    const requestOptions = {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ user: email, pass: password })
+    }; fetch(
+        'https://webservices.franciscocaballero.com.mx/ws_jwt.php', requestOptions)
+        .then(response => {
+            console.log(response);
+        })
 
-    try {
-        const response = await httpClient.post(`auth/login?email=${email}&password=${password}`)
-        
-        if (!response.status) {
-            dispatch({
-                type: 'SET_RESPONSE_ERROR',
-                payload: {
-                    error: true,
-                    message: 'Los accesos son incorrectos, favor de verificarlos.'
-                }
-            });
-            rootNavigation.navigate('AuthScreen')
-        } else {
-            const user = { ...response.user, token: `${response.token_type} ${response.token}`, expires_at: response.expires_at }
-            await AsyncStorage.setItem('user', JSON.stringify(user))
-            dispatch({ type: 'SIGNIN', payload: { user } });
-            rootNavigation.navigate('WrapperInnerScreens')
-        }
-    } catch (error) {
-        dispatch({
-            type: 'SET_RESPONSE_ERROR',
-            payload: {
-                error: true,
-                message: 'Ha ocurrido un error, por favor inténtelo de nuevo más tarde.'
-            }
-        });
-        rootNavigation.navigate('AuthScreen')
-    }
+
+    // const response = await httpClient.post('ws_jwt.php', { user: email, pass: password })
+    // console.log(response);
+    // if (!response.status){
+    //     dispatch({ type: 'FETCHING_DATA', payload: { fetchingData: false } })
+    //     throwAlertError(
+    //         "Error en autentificacion", 
+    //         response.message,
+    //     );
+    // }else{
+    //     const user = { ...response.user, token: `${response.token_type} ${response.token}`, expires_at: response.expires_at }
+    //     await AsyncStorage.setItem('user', JSON.stringify(user))
+    //     dispatch({ type: 'SIGNIN', payload: { user } });
+    // }
 }
 
 export const { Context, Provider } = createDataContext(
