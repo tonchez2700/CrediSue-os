@@ -4,10 +4,11 @@ import {
     Text, FlatList
 
 } from 'react-native';
-import { Input, Button, Icon } from 'react-native-elements'
+import { Icon } from 'react-native-elements'
 import { useNavigation } from '@react-navigation/native';
-import { Context as RegisterContext } from '../context/RegisterContext';
+import { Context as AccountDataContext } from '../context/AccountDataContext';
 import tw from 'tailwind-react-native-classnames'
+import EntryList from '../components/EntryList';
 import moment from 'moment';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
@@ -17,44 +18,79 @@ const HomeScreen = () => {
     const navigation = useNavigation();
     const { state,
         clearState,
-        setFetchingList,
-        ViewComing,
-        handleInputChange } = useContext(RegisterContext);
+        setDataAccount,
+        setDataPayment
+    } = useContext(AccountDataContext);
+
+    useEffect(() => {
+        setDataAccount()
+        setDataPayment()
+    }, []);
 
     return (
 
         <View style={{ flex: 1, backgroundColor: '#ECECEC', justifyContent: 'flex-start' }}>
-            <View style={tw`my-5`}>
-                <Text style={{ textAlign: 'center' }}>Bienvenido "Usuario 001"</Text>
-                <View style={[tw`my-5`, { backgroundColor: 'white', width: '100%', elevation: 10 }]}>
-                    <Text style={{ textAlign: 'center', fontWeight: 'bold', marginVertical: 10 }}>Sucursal 0001</Text>
-                    <View style={tw`flex-row  justify-between p-5`}>
-                        <View style={[tw`flex-col pl-5`, { width: '50%' }]}>
-                            <Text style={[tw`text-black font-bold`, { color: '#23233C' }]}>Sucursal:</Text>
-                            <Text style={[tw`text-black font-bold`, { color: '#23233C' }]}>No de cuenta:</Text>
-                            <Text style={[tw`text-black font-bold`, { color: '#23233C' }]}>Artículo:</Text>
-                            <Text style={[tw`text-black font-bold`, { color: '#23233C' }]}>Plan:</Text>
-                            <Text style={[tw`text-black font-bold`, { color: '#23233C' }]}>Saldo actual:</Text>
+            <ScrollView>
+                <View style={tw`my-5`}>
+                    <Text style={{ textAlign: 'center', fontWeight: 'bold', marginVertical: 8, fontSize: 19 }}>Datos de la cuenta</Text>
+                    <View style={[tw`p-2 `, {
+                        shadowColor: 'black',
+                        shadowOpacity: 0.26,
+                        shadowOffset: { width: 0, height: 2 },
+                        shadowRadius: 10,
+                        elevation: 3,
+                        backgroundColor: 'white'
+                    }]}>
+                        <Text style={{ textAlign: 'center', fontWeight: 'bold', marginVertical: 8, fontSize: 15 }}>Datos de la cuenta</Text>
+                        <View style={tw`flex-col  justify-between p-5`}>
+                            <View style={[tw`flex-row`, { marginVertical: 1 }]}>
+                                <Text style={styles.TextItems}>Sucursal:</Text>
+                                <Text style={{ textAlign: 'left', width: '50%' }}>{state.data?.Municipio}</Text>
+                            </View>
+                            <View style={[tw`flex-row`, { marginVertical: 1 }]}>
+                                <Text style={styles.TextItems}>No de cuenta:</Text>
+                                <Text style={{ textAlign: 'left', width: '50%' }}>{state.data?.num_cuenta}</Text>
+                            </View>
+                            <View style={[tw`flex-row`, { marginVertical: 1 }]}>
+                                <Text style={styles.TextItems}>Artículo:</Text>
+                                <Text style={{ textAlign: 'left', width: '50%' }}>{state.data?.Articulo}</Text>
+                            </View>
+                            <View style={[tw`flex-row`, { marginVertical: 1 }]}>
+                                <Text style={styles.TextItems}>Plan:</Text>
+                                <Text style={{ textAlign: 'left', width: '50%' }}>{state.data?.Plan}</Text>
+                            </View>
+                            <View style={[tw`flex-row`, { marginVertical: 1 }]}>
+                                <Text style={styles.TextItems}>Saldo actual:</Text>
+                                <Text style={{ textAlign: 'left', width: '50%' }}>{state.data?.SaldoActual}</Text>
+                            </View>
                         </View>
-                        <View style={[tw`flex-col pl-5`, { width: '50%' }]}>
-                            <Text style={{ textAlign: 'left' }}>Sucursal 0001</Text>
-                            <Text style={{ textAlign: 'left' }}>0123456789</Text>
-                            <Text style={{ textAlign: 'left' }}>XXXXXXXXX:</Text>
-                            <Text style={{ textAlign: 'left' }}>XXXXXXXXX</Text>
-                            <Text style={{ textAlign: 'left' }}>$9999.99</Text>
+                        <Text style={{ textAlign: 'center', padding: 20, fontSize: 20 }}>Su cuenta se encuentra al corriente.</Text>
+                    </View>
+                </View>
+                <View style={tw`my-5`}>
+                    <View style={[tw`p-2 pb-6`, {
+                        shadowColor: 'black',
+                        shadowOpacity: 0.26,
+                        shadowOffset: { width: 0, height: 2 },
+                        shadowRadius: 10,
+                        elevation: 3,
+                        backgroundColor: 'white'
+                    }]}>
+                        <View style={[tw`my-5`]}>
+                            <Text style={{ textAlign: 'center', fontWeight: 'bold', fontSize: 15 }}>Últimos 3 pagos</Text>
                         </View>
+                        <View style={[tw` flex-row justify-between`, { width: '100%', marginTop: 8 }]}>
+                            <Text style={[styles.TextTable, { width: '25%' }]}>Descripción</Text>
+                            <Text style={[styles.TextTable, { width: '25%' }]}>Recibo</Text>
+                            <Text style={[styles.TextTable, { width: '25%' }]}>Fecha</Text>
+                            <Text style={[styles.TextTable, { width: '25%' }]}>Importe</Text>
+                        </View>
+                        <EntryList
+                            data={state.payments}
+                        />
                     </View>
-                    <Text style={{ textAlign: 'center', padding: 20, fontSize: 20 }}>Su cuenta se encuentra al corriente.</Text>
                 </View>
-            </View>
-            <View style={tw`my-5`}>
-                <View style={[tw`my-5`, { backgroundColor: 'white', width: '100%' }]}>
-                    <View style={[tw`my-5`]}>
-                        <Text style={{ textAlign: 'center' }}>Últimos 3 pagos</Text>
-                    </View>
-                </View>
-
-            </View>
+            </ScrollView>
         </View >
     )
 }
@@ -65,20 +101,17 @@ const styles = StyleSheet.create({
     iconBtn: {
         backgroundColor: '#2D5DA0'
     },
-    buttonsContainer: {
-        flexDirection: 'row',
-        flexWrap: 'wrap',
-        justifyContent: 'flex-end',
-        alignItems: 'flex-end',
-        width: '100%',
-        marginVertical: 20,
+    TextItems: {
+        width: '50%',
+        color: '#23233C',
+        fontWeight: 'bold'
     },
     TextTable: {
         textAlign: 'center',
         fontSize: 14,
         paddingVertical: 10,
         fontWeight: 'bold',
-        backgroundColor: '#2D5DA0',
+        backgroundColor: '#004480',
         color: 'white',
         borderBottomWidth: 1
     },

@@ -11,7 +11,7 @@ const NavBar = () => {
     const navigation = useNavigation();
     return (
         <Header
-            backgroundColor="#2D5DA0"
+            backgroundColor="#004480"
             barStyle="default"
             leftContainerStyle={{ justifyContent: 'center' }}
             rightContainerStyle={{ justifyContent: 'center' }}

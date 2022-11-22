@@ -3,7 +3,7 @@ import {
     ScrollView, StyleSheet, View, Image,
     Text, TouchableOpacity, ActivityIndicator, Alert,
 } from 'react-native'
-import { Context as RegisterContext } from '../context/RegisterContext';
+import { Context as RegisterContext } from '../context/AccountDataContext';
 import { useNavigation, } from '@react-navigation/native';
 import { Input, Button, Icon } from 'react-native-elements'
 import Carousel from 'react-native-snap-carousel';

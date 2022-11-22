@@ -8,8 +8,10 @@ import { Context as AuthContext } from '../context/AuthContext';
 import { AuthSchema } from './../config/schemas';
 import useHandleOnChangeTextInput from './../hooks/useHandleOnChangeTextInput';
 import SimpleNavBar from '../components/SimpleNavBar'
+import { useNavigation } from '@react-navigation/native';
 
 const AuthScreen = () => {
+    const navigation = useNavigation();
     const { state, signin, clearState } = useContext(AuthContext);
     const [inputState, handleInputChange] = useHandleOnChangeTextInput(AuthSchema);
 
@@ -27,21 +29,21 @@ const AuthScreen = () => {
                         name='username'
                         placeholder='Correo electrónico'
                         leftIcon={<Icon type='font-awesome' name='envelope' size={25} color='black' style={{ marginRight: 15 }} />}
-                        inputContainerStyle={styles.input}                        keyboardType='email-address'
+                        inputContainerStyle={styles.input} keyboardType='email-address'
                         autoCapitalize='none'
                         onChangeText={(value) => handleInputChange(value, 'email')} />
                     <InputForm
                         maxLength={15}
                         name='password'
                         leftIcon={<Icon type='font-awesome' name='lock' size={25} color='black' style={{ marginRight: 15 }} />}
-                        inputContainerStyle={styles.input}     
+                        inputContainerStyle={styles.input}
                         placeholder='Contraseña'
                         secureTextEntry={true}
                         onChangeText={(value) => handleInputChange(value, 'password')} />
 
                     <ButtonFrom
                         handleSubmit={() => {
-                            signin(inputState);
+                             signin(inputState);
                         }}
                         loading={state.fetchingData ? true : false}
                     />

@@ -7,7 +7,7 @@ const SimpleNavBar = () => {
     return (
         <Header
             backgroundColor="#004480" 
-            centerContainerStyle={{margin: 40}}
+            centerContainerStyle={{margin: 30}}
             centerComponent={ <Logo size='xs' /> }
             barStyle="default"/>
     )
