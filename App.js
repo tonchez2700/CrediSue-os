@@ -6,6 +6,7 @@ import { Provider as AuthProvider } from './src/context/AuthContext'
 import { navigationRef } from './src/helpers/rootNavigation'
 
 import AuthScreen from './src/screens/AuthScreen';
+import ChatScreen from './src/screens/ChatScreen';
 import LoadingScreen from './src/screens/LoadingScreen';
 import WrapperInnerScreens from './src/screens/WrapperInnerScreens';
 
@@ -21,6 +22,7 @@ export default function App() {
             <Stack.Screen name="LoadingScreen" component={LoadingScreen} />
             <Stack.Screen name="WrapperInnerScreens" component={WrapperInnerScreens} />
             <Stack.Screen name="AuthScreen" component={AuthScreen} />
+            <Stack.Screen name="ChatScreen" component={ChatScreen} />
         </Stack.Navigator>
       </AuthProvider>
     </NavigationContainer>
