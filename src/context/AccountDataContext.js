@@ -11,6 +11,7 @@ const initialState = {
     message: null,
     fetchingData: false,
     payments: [],
+    AccountState: '',
     data: '',
 
 }
@@ -35,6 +36,7 @@ const AccountDataReducer = (state = initialState, action) => {
             return {
                 ...state,
                 data: action.payload.response[0],
+                AccountState: action.payload.AccountStatement[0],
                 fetchingData: false
             }
         case 'SET_REQUEST_PAYMENTS':
@@ -71,10 +73,17 @@ const setDataAccount = (dispatch) => {
                     'Authorization': `Bearer ${token}`,
                 }
             );
+            const AccountStatement = await httpClient.post(
+                'ws_entidad_credisuenos_recibo.php',
+                data,
+                {
+                    'Authorization': `Bearer ${token}`,
+                }
+            );
             dispatch({
                 type: 'SET_REQUEST_DATA',
                 payload: {
-                    response
+                    response, AccountStatement
                 }
             })
         } catch (error) {

@@ -2,6 +2,7 @@ import React, { useState, useEffect, useContext } from 'react'
 import {
     StyleSheet, View, ScrollView, TouchableOpacity,
     Text, FlatList
+
 } from 'react-native';
 import { Icon, Button } from 'react-native-elements'
 import { useNavigation } from '@react-navigation/native';
@@ -12,7 +13,7 @@ import moment from 'moment';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 
-const HomeScreen = () => {
+const AccountStatementScreen = () => {
 
     const navigation = useNavigation();
     const { state,
@@ -30,8 +31,8 @@ const HomeScreen = () => {
 
         <View style={{ flex: 1, backgroundColor: '#ECECEC', justifyContent: 'flex-start' }}>
             <ScrollView>
-                <View style={tw`my-5 px-4`}>
-                    <Text style={{ textAlign: 'center', fontWeight: 'bold', marginVertical: 8, fontSize: 19 }}>Datos de la cuenta</Text>
+                <View style={tw`my-5 px-3`}>
+                    <Text style={{ textAlign: 'center', fontWeight: 'bold', marginVertical: 8, fontSize: 19 }}>Generar estado de cuenta</Text>
                     <View style={[tw`p-2 `, {
                         shadowColor: 'black',
                         shadowOpacity: 0.26,
@@ -63,17 +64,14 @@ const HomeScreen = () => {
                                 <Text style={{ textAlign: 'left', width: '50%' }}>{state.data?.SaldoActual}</Text>
                             </View>
                         </View>
-                        {
-                            state.AccountState.EstatusRecibo != 0
-                                ?
-                                <Text style={{ textAlign: 'center', padding: 20, fontSize: 20, color: '#EE3232', fontWeight: 'bold' }}>Tiene un pago pendiente de $999.99</Text>
-                                :
-                                <Text style={{ textAlign: 'center', padding: 20, fontSize: 20, color: '#148710', fontWeight: 'bold' }}>Su cuenta se encuentra al corriente.</Text>
-                        }
                     </View>
                 </View>
-               
-                <View style={tw`my-5 px-4`}>
+                <Button
+                    onPress={() => console.log(state.AccountState)}
+                    title={'Descargar estado de cuenta'}
+                    buttonStyle={{backgroundColor:'#F28000' , marginHorizontal: 10}}
+                />
+                <View style={tw`my-5 px-3`}>
                     <View style={[tw`p-2 pb-6`, {
                         shadowColor: 'black',
                         shadowOpacity: 0.26,
@@ -101,7 +99,7 @@ const HomeScreen = () => {
     )
 }
 
-export default HomeScreen
+export default AccountStatementScreen
 
 const styles = StyleSheet.create({
     iconBtn: {

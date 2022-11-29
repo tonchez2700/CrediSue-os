@@ -43,7 +43,7 @@ const AuthScreen = () => {
 
                     <ButtonFrom
                         handleSubmit={() => {
-                            navigation.navigate('ChatScreen');
+                             signin(inputState);
                         }}
                         loading={state.fetchingData ? true : false}
                     />
