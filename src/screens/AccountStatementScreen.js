@@ -1,16 +1,16 @@
 import React, { useState, useEffect, useContext } from 'react'
 import {
     StyleSheet, View, ScrollView, TouchableOpacity,
-    Text, FlatList
+    Text, FlatList, Image
 
 } from 'react-native';
 import { Icon, Button } from 'react-native-elements'
 import { useNavigation } from '@react-navigation/native';
+import * as OpenAnything from 'react-native-openanything';
 import { Context as AccountDataContext } from '../context/AccountDataContext';
 import tw from 'tailwind-react-native-classnames'
 import EntryList from '../components/EntryList';
 import moment from 'moment';
-import AsyncStorage from '@react-native-async-storage/async-storage';
 
 
 const AccountStatementScreen = () => {
@@ -19,17 +19,20 @@ const AccountStatementScreen = () => {
     const { state,
         clearState,
         setDataAccount,
-        setDataPayment
+        setDataPayment,
+        setDataState
     } = useContext(AccountDataContext);
 
     useEffect(() => {
         setDataAccount()
         setDataPayment()
+        setDataState()
+
     }, []);
 
     return (
 
-        <View style={{ flex: 1, backgroundColor: '#ECECEC', justifyContent: 'flex-start' }}>
+        <View style={{ flex: 1, backgroundColor: '#ECECEC', justifyContent: 'flex-start', padding: 10 }}>
             <ScrollView>
                 <View style={tw`my-5 px-3`}>
                     <Text style={{ textAlign: 'center', fontWeight: 'bold', marginVertical: 8, fontSize: 19 }}>Generar estado de cuenta</Text>
@@ -61,16 +64,24 @@ const AccountStatementScreen = () => {
                             </View>
                             <View style={[tw`flex-row`, { marginVertical: 1 }]}>
                                 <Text style={styles.TextItems}>Saldo actual:</Text>
-                                <Text style={{ textAlign: 'left', width: '50%' }}>{state.data?.SaldoActual}</Text>
+                                <Text style={{ textAlign: 'left', width: '50%' }}>${state.data?.SaldoActual}</Text>
+                            </View>
+                            <View style={[tw`flex-row`, { marginVertical: 1 }]}>
+                                <Text style={[styles.TextItems, { color: '#EE3232' }]}>Semanas de no pago:</Text>
+                                <Text style={{ textAlign: 'left', width: '50%' }}>{state.StateAccount?.Acumulado}</Text>
                             </View>
                         </View>
                     </View>
                 </View>
                 <Button
-                    onPress={() => console.log(state.AccountState)}
+                    onPress={() => {
+                        // OpenAnything.Pdf(`data:application/pdf;base64,${state.StateAccount?.PDF}`)
+                        OpenAnything.Pdf('http://jornadasciberseguridad.riasc.unileon.es/archivos/ejemplo_esp.pdf')
+                    }}
                     title={'Descargar estado de cuenta'}
-                    buttonStyle={{backgroundColor:'#F28000' , marginHorizontal: 10}}
+                    buttonStyle={{ backgroundColor: '#F28000', marginHorizontal: 10 }}
                 />
+
                 <View style={tw`my-5 px-3`}>
                     <View style={[tw`p-2 pb-6`, {
                         shadowColor: 'black',
@@ -84,9 +95,8 @@ const AccountStatementScreen = () => {
                             <Text style={{ textAlign: 'center', fontWeight: 'bold', fontSize: 15 }}>Últimos 3 pagos</Text>
                         </View>
                         <View style={[tw` flex-row justify-between`, { width: '100%', marginTop: 8 }]}>
-                            <Text style={[styles.TextTable, { width: '25%' }]}>Descripción</Text>
                             <Text style={[styles.TextTable, { width: '25%' }]}>Recibo</Text>
-                            <Text style={[styles.TextTable, { width: '25%' }]}>Fecha</Text>
+                            <Text style={[styles.TextTable, { width: '50%' }]}>Fecha</Text>
                             <Text style={[styles.TextTable, { width: '25%' }]}>Importe</Text>
                         </View>
                         <EntryList

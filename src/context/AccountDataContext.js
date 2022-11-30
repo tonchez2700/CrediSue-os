@@ -12,6 +12,7 @@ const initialState = {
     fetchingData: false,
     payments: [],
     AccountState: '',
+    StateAccount: '',
     data: '',
 
 }
@@ -43,6 +44,12 @@ const AccountDataReducer = (state = initialState, action) => {
             return {
                 ...state,
                 payments: action.payload.response,
+                fetchingData: false
+            }
+        case 'SET_REQUEST_STATE':
+            return {
+                ...state,
+                StateAccount: action.payload.response,
                 fetchingData: false
             }
         default:
@@ -134,6 +141,40 @@ const setDataPayment = (dispatch) => {
 }
 
 
+const setDataState = (dispatch) => {
+    return async () => {
+        try {
+            const user = JSON.parse(await AsyncStorage.getItem('user'));
+            const data = {
+                Modulo: user.modulo,
+                Cuenta: user.cuenta
+            }
+            const token = user.token;
+            const response = await httpClient.post(
+                'ws_entidad_credisuenos_estado_cuenta.php',
+                data,
+                {
+                    'Authorization': `Bearer ${token}`,
+                }
+            );
+            dispatch({
+                type: 'SET_REQUEST_STATE',
+                payload: {
+                    response
+                }
+            })
+        } catch (error) {
+            dispatch({
+                type: 'SET_REQUEST_ERROR',
+                payload: {
+                    error: true,
+                    message: 'Por el momento el servicio no está disponible, inténtelo mas tarde.'
+                }
+            })
+        }
+    }
+}
+
 
 const handleInputChange = (dispatch) => {
     return async (value, typedata) => {
@@ -151,6 +192,7 @@ export const { Context, Provider } = createDataContext(
         clearState,
         setDataAccount,
         setDataPayment,
+        setDataState,
         handleInputChange,
 
     },

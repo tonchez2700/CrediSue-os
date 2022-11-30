@@ -24,10 +24,16 @@
       "adaptiveIcon": {
         "foregroundImage": "./assets/icon.png",
         "backgroundColor": "#FFFFFF"
-      }
+      },
+      "package": "com.tonchez2700.crediSuenos"
     },
     "web": {
       "favicon": "./assets/favicon.png"
+    },
+    "extra": {
+      "eas": {
+        "projectId": "91800c5e-3934-4791-a8aa-0445dd970280"
+      }
     }
   }
 }

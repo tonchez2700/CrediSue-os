@@ -18,19 +18,21 @@ const HomeScreen = () => {
     const { state,
         clearState,
         setDataAccount,
-        setDataPayment
+        setDataPayment,
+        setDataState
     } = useContext(AccountDataContext);
 
     useEffect(() => {
         setDataAccount()
         setDataPayment()
+        setDataState()
     }, []);
 
     return (
 
-        <View style={{ flex: 1, backgroundColor: '#ECECEC', justifyContent: 'flex-start' }}>
+        <View style={{ flex: 1, backgroundColor: '#ECECEC', justifyContent: 'flex-start', padding: 10 }}>
             <ScrollView>
-                <View style={tw`my-5 px-4`}>
+                <View style={tw`my-5`}>
                     <Text style={{ textAlign: 'center', fontWeight: 'bold', marginVertical: 8, fontSize: 19 }}>Datos de la cuenta</Text>
                     <View style={[tw`p-2 `, {
                         shadowColor: 'black',
@@ -60,7 +62,7 @@ const HomeScreen = () => {
                             </View>
                             <View style={[tw`flex-row`, { marginVertical: 1 }]}>
                                 <Text style={styles.TextItems}>Saldo actual:</Text>
-                                <Text style={{ textAlign: 'left', width: '50%' }}>{state.data?.SaldoActual}</Text>
+                                <Text style={{ textAlign: 'left', width: '50%' }}>${state.data?.SaldoActual}</Text>
                             </View>
                         </View>
                         {
@@ -72,8 +74,8 @@ const HomeScreen = () => {
                         }
                     </View>
                 </View>
-               
-                <View style={tw`my-5 px-4`}>
+
+                <View style={tw`my-5`}>
                     <View style={[tw`p-2 pb-6`, {
                         shadowColor: 'black',
                         shadowOpacity: 0.26,
@@ -86,9 +88,8 @@ const HomeScreen = () => {
                             <Text style={{ textAlign: 'center', fontWeight: 'bold', fontSize: 15 }}>Últimos 3 pagos</Text>
                         </View>
                         <View style={[tw` flex-row justify-between`, { width: '100%', marginTop: 8 }]}>
-                            <Text style={[styles.TextTable, { width: '25%' }]}>Descripción</Text>
                             <Text style={[styles.TextTable, { width: '25%' }]}>Recibo</Text>
-                            <Text style={[styles.TextTable, { width: '25%' }]}>Fecha</Text>
+                            <Text style={[styles.TextTable, { width: '50%' }]}>Fecha</Text>
                             <Text style={[styles.TextTable, { width: '25%' }]}>Importe</Text>
                         </View>
                         <EntryList

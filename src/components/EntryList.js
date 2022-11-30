@@ -13,14 +13,11 @@ const EntryList = ({ data }) => {
         <View>
             {
                 data.map((e) =>
-                    <View key={e.NumRecibo} style={[tw`flex-row`, { backgroundColor: 'white' }]}>
-                        <Text style={[styles.TextTableItems, { width: '25%' }]}>{e.descripcion}</Text>
-                        <View style={{ width: '25%', justifyContent: 'center', borderBottomColor: '#E6E6E6', borderBottomWidth: 1 }}>
-                            <Icon type='font-awesome' name='file' color='#004480' size={19}  ></Icon>
-                        </View>
-                        <Text style={[styles.TextTableItems, { width: '25%' }]}>{moment(e.FechaCobro).format('DD/MM/YYYY')}</Text>
-                        <Text style={[styles.TextTableItems, { width: '25%' }]}>${e.Importe}</Text>
-                    </View>
+                <View key={e.NumRecibo} style={[tw`flex-row`, { backgroundColor: 'white' }]}>
+                <Text style={[styles.TextTableItems, { width: '25%' }]}>{e.NumRecibo}</Text>
+                <Text style={[styles.TextTableItems, { width: '50%' }]}>{moment(e.FechaCobro).format('DD/MM/YYYY')}</Text>
+                <Text style={[styles.TextTableItems, { width: '25%' }]}>${e.Importe}</Text>
+            </View>
                 )
             }
         </View>

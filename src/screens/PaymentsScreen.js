@@ -13,7 +13,7 @@ import moment from 'moment';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 
-const AccountStatementScreen = () => {
+const PaymentsScreen = () => {
 
     const navigation = useNavigation();
     const { state,
@@ -29,41 +29,47 @@ const AccountStatementScreen = () => {
 
     return (
 
-        <View style={{ flex: 1, backgroundColor: '#ECECEC', justifyContent: 'flex-start' }}>
+        <View style={{ flex: 1, backgroundColor: '#ECECEC' }}>
             <ScrollView>
-               
+                <View style={[tw`my-5 px-3`, { backgroundColor: 'white' }]}>
+                    <Text style={styles.titlleText}>Selecciona tu método de pago</Text>
+                    <Button
+                        onPress={() => console.log(state.AccountState)}
+                        title={'Descargar estado de cuenta'}
+                        titleStyle={{color:'black'}}
+                        buttonStyle={styles.btnPayments}
+                    />
+                    <Button
+                         onPress={() => console.log(state.AccountState)}
+                         title={'Descargar estado de cuenta'}
+                         titleStyle={{color:'black'}}
+                         buttonStyle={styles.btnPayments}
+                    />
+                    <Button
+                         onPress={() => console.log(state.AccountState)}
+                         title={'Descargar estado de cuenta'}
+                         titleStyle={{color:'black'}}
+                         buttonStyle={styles.btnPayments}
+                    />
+                </View>
             </ScrollView>
         </View >
     )
 }
 
-export default AccountStatementScreen
+export default PaymentsScreen
 
 const styles = StyleSheet.create({
-    iconBtn: {
-        backgroundColor: '#2D5DA0'
-    },
-    TextItems: {
-        width: '50%',
-        color: '#23233C',
+    titlleText: {
+        textAlign: 'center',
+        fontSize: 15,
         fontWeight: 'bold'
     },
-    TextTable: {
-        textAlign: 'center',
-        fontSize: 14,
-        paddingVertical: 10,
-        fontWeight: 'bold',
-        backgroundColor: '#004480',
-        color: 'white',
-    },
-    TextTableItems: {
-        fontSize: 13,
-        padding: 10,
-        textAlign: 'center',
-        fontWeight: 'bold',
-        color: '#000000',
-        borderBottomColor: '#E6E6E6',
-        borderBottomWidth: 1
-
+    btnPayments: {
+       borderColor: '#F28000',
+       borderWidth: 1,
+       borderRadius: 10,
+       marginVertical: 5,
+       backgroundColor: 'white'
     },
 })

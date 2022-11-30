@@ -1,5 +1,5 @@
 import React, { useContext } from 'react'
-import { TouchableOpacity } from 'react-native';
+import { TouchableOpacity, StatusBar } from 'react-native';
 import { Header, Icon } from 'react-native-elements';
 import { useNavigation } from '@react-navigation/native';
 import { Context as AuthContext } from '../context/AuthContext';
@@ -12,10 +12,9 @@ const NavBar = () => {
         navigation.openDrawer();
     }
     return (
-        <Header
-            backgroundColor="#004480"
-            barStyle="default"
-            leftContainerStyle={{ justifyContent: 'center' }}
+        <StatusBar
+            backgroundColor={'#004480'}
+            barStyle="light-content" 
             rightContainerStyle={{ justifyContent: 'center' }}
             rightComponent={
                 <TouchableOpacity
