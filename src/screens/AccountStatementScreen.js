@@ -76,7 +76,7 @@ const AccountStatementScreen = () => {
                 <Button
                     onPress={() => {
                         // OpenAnything.Pdf(`data:application/pdf;base64,${state.StateAccount?.PDF}`)
-                        OpenAnything.Pdf('http://jornadasciberseguridad.riasc.unileon.es/archivos/ejemplo_esp.pdf')
+                        OpenAnything.Pdf(`${state.StateAccount?.PDF_liga}`)
                     }}
                     title={'Descargar estado de cuenta'}
                     buttonStyle={{ backgroundColor: '#F28000', marginHorizontal: 10 }}

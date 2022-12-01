@@ -8,6 +8,7 @@ import { useNavigation } from '@react-navigation/native';
 import { Context as AccountDataContext } from '../context/AccountDataContext';
 import tw from 'tailwind-react-native-classnames'
 import EntryList from '../components/EntryList';
+import NavBar from '../components/NavBar';
 import moment from 'moment';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
@@ -27,7 +28,7 @@ const HomeScreen = () => {
         setDataPayment()
         setDataState()
     }, []);
-
+    const colorTittle = state.AccountState?.EstatusRecibo != 1 ? '#F28000' : '#004480'
     return (
 
         <View style={{ flex: 1, backgroundColor: '#ECECEC', justifyContent: 'flex-start', padding: 10 }}>
@@ -66,11 +67,20 @@ const HomeScreen = () => {
                             </View>
                         </View>
                         {
-                            state.AccountState.EstatusRecibo != 0
+                            state.AccountState.EstatusRecibo != 1
                                 ?
-                                <Text style={{ textAlign: 'center', padding: 20, fontSize: 20, color: '#EE3232', fontWeight: 'bold' }}>Tiene un pago pendiente de $999.99</Text>
+                                <View>
+                                    <Text style={{ textAlign: 'center', padding: 20, fontSize: 20, color: '#EE3232', fontWeight: 'bold' }}>{state.data?.MensajeSugerido}</Text>
+                                    <Button
+                                        onPress={() => {
+                                           navigation.navigate('PaymentsScreen')
+                                        }}
+                                        title={'Realizar el pago'}
+                                        buttonStyle={{ backgroundColor: '#004480', marginHorizontal: 10 }}
+                                    />
+                                </View>
                                 :
-                                <Text style={{ textAlign: 'center', padding: 20, fontSize: 20, color: '#148710', fontWeight: 'bold' }}>Su cuenta se encuentra al corriente.</Text>
+                                <Text style={{ textAlign: 'center', padding: 20, fontSize: 20, color: '#148710', fontWeight: 'bold' }}>{state.data?.MensajeSugerido}</Text>
                         }
                     </View>
                 </View>
@@ -88,9 +98,9 @@ const HomeScreen = () => {
                             <Text style={{ textAlign: 'center', fontWeight: 'bold', fontSize: 15 }}>Últimos 3 pagos</Text>
                         </View>
                         <View style={[tw` flex-row justify-between`, { width: '100%', marginTop: 8 }]}>
-                            <Text style={[styles.TextTable, { width: '25%' }]}>Recibo</Text>
-                            <Text style={[styles.TextTable, { width: '50%' }]}>Fecha</Text>
-                            <Text style={[styles.TextTable, { width: '25%' }]}>Importe</Text>
+                            <Text style={[styles.TextTable, { width: '25%', backgroundColor: colorTittle }]}>Recibo</Text>
+                            <Text style={[styles.TextTable, { width: '50%', backgroundColor: colorTittle }]}>Fecha</Text>
+                            <Text style={[styles.TextTable, { width: '25%', backgroundColor: colorTittle }]}>Importe</Text>
                         </View>
                         <EntryList
                             data={state.payments}
@@ -118,7 +128,6 @@ const styles = StyleSheet.create({
         fontSize: 14,
         paddingVertical: 10,
         fontWeight: 'bold',
-        backgroundColor: '#004480',
         color: 'white',
     },
     TextTableItems: {

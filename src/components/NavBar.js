@@ -8,30 +8,24 @@ import Images from '@assets/images';
 const NavBar = () => {
     const { signout } = useContext(AuthContext);
     const navigation = useNavigation();
-    const openDrawer = () => {
-        navigation.openDrawer();
-    }
+   
     return (
-        <StatusBar
-            backgroundColor={'#004480'}
-            barStyle="light-content" 
+        <Header
+            backgroundColor="#004480"
+            barStyle="default"
+            leftContainerStyle={{ justifyContent: 'center' }}
             rightContainerStyle={{ justifyContent: 'center' }}
             rightComponent={
                 <TouchableOpacity
-                    onPress={() => signout()}
-                    style={{ position: 'absolute', }}
-                >
+                    onPress={() => signout()}>
                     <Icon
-                        size={25}
                         name='sign-out'
                         type='font-awesome'
                         color='white' />
                 </TouchableOpacity>
-
             }
             leftComponent={
                 <TouchableOpacity
-                    onPress={() => openDrawer()}
                     style={{ position: 'absolute', }}>
                     <Icon
                         name='cube'
