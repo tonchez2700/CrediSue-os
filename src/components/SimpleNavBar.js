@@ -6,10 +6,13 @@ import Images from '@assets/images';
 const SimpleNavBar = () => {
     return (
         <Header
-            backgroundColor="#004480" 
-            centerContainerStyle={{margin: 30}}
-            centerComponent={ <Logo size='xs' /> }
-            barStyle="default"/>
+            backgroundColor="#004480"
+            barStyle="default"
+            centerComponent={<Logo size='sm' />}
+            leftContainerStyle={{ justifyContent: 'center' }}
+            rightContainerStyle={{ justifyContent: 'center' }}
+        />
+
     )
 }
 

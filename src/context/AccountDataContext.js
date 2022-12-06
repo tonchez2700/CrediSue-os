@@ -108,6 +108,7 @@ const setDataAccount = (dispatch) => {
 const setDataPayment = (dispatch) => {
     return async () => {
         try {
+            dispatch({ type: 'FETCHING_DATA', payload: { fetchingData: true } });
             const user = JSON.parse(await AsyncStorage.getItem('user'));
             const data = {
                 Modulo: user.modulo,
