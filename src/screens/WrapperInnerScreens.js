@@ -1,11 +1,18 @@
 import React, { useContext } from 'react'
 import { SafeAreaView, View, Text, TouchableOpacity, Dimensions, StyleSheet } from 'react-native'
 import { createDrawerNavigator, DrawerContentScrollView, DrawerItemList, DrawerItem, } from '@react-navigation/drawer';
-import { Provider as AccountDataProvider } from '../context/AccountDataContext';
 import { navigationRef } from '../helpers/rootNavigation';
+
+import { Provider as AccountDataProvider } from '../context/AccountDataContext';
+import { Context as AuthContext } from '../context/AuthContext';
+import { Provider as PaymentsContext } from '../context/PaymentsContext';
+
+import CardPaymentScreen from './CardPaymentScreen';
 import AccountStatementScreen from './AccountStatementScreen';
 import PaymentsScreen from './PaymentsScreen';
-import { Context as AuthContext } from '../context/AuthContext';
+import CashPaymentScreen from './CashPaymentScreen';
+import CardDepositScreen from './CardDepositScreen';
+
 import tw from 'tailwind-react-native-classnames';
 import Images from '@assets/images';
 import NavBar from '../components/NavBar'
@@ -38,7 +45,10 @@ const WrapperInnerScreens = () => {
                     />
                     <DrawerItem
                         label="Salir"
-                        onPress={() => signout()}
+                        onPress={() => {
+                            signout()
+                            props.navigation.closeDrawer()
+                        }}
                     />
 
                 </DrawerContentScrollView>
@@ -50,23 +60,28 @@ const WrapperInnerScreens = () => {
     return (
         <SafeAreaView style={[tw`flex-1 `, { backgroundColor: '#ECECEC' }]}>
             <AccountDataProvider>
-                <Drawer.Navigator
-                    screenOptions={{
-                        drawerActiveBackgroundColor: '#005691',
-                        drawerInactiveBackgroundColor: '#FFFFFF',
-                        drawerActiveTintColor: '#FFFFFF',
-                        drawerInactiveTintColor: '#23233C',
-                        header: (...props) => (
+                <PaymentsContext>
+                    <Drawer.Navigator
+                        screenOptions={{
+                            drawerActiveBackgroundColor: '#005691',
+                            drawerInactiveBackgroundColor: '#FFFFFF',
+                            drawerActiveTintColor: '#FFFFFF',
+                            drawerInactiveTintColor: '#23233C',
+                            header: (...props) => (
 
-                            <NavBar navigation={props[0].navigation} />
-                        )
-                    }}
-                    drawerContent={(props) => <CustomDrawerContent {...props} />}
-                    useLegacyImplementation>
-                    <Drawer.Screen name="Inicio" component={HomeScreen} />
-                    <Drawer.Screen name="PaymentsScreen" component={PaymentsScreen} />
-                    <Drawer.Screen name="AccountStatementScreen" component={AccountStatementScreen} />
-                </Drawer.Navigator>
+                                <NavBar navigation={props[0].navigation} />
+                            )
+                        }}
+                        drawerContent={(props) => <CustomDrawerContent {...props} />}
+                        useLegacyImplementation>
+                        <Drawer.Screen name="Inicio" component={HomeScreen} />
+                        <Drawer.Screen name="PaymentsScreen" component={PaymentsScreen} />
+                        <Drawer.Screen name="CardPaymentScreen" component={CardPaymentScreen} />
+                        <Drawer.Screen name="CashPaymentScreen" component={CashPaymentScreen} />
+                        <Drawer.Screen name="CardDepositScreen" component={CardDepositScreen} />
+                        <Drawer.Screen name="AccountStatementScreen" component={AccountStatementScreen} />
+                    </Drawer.Navigator>
+                </PaymentsContext>
             </AccountDataProvider>
         </SafeAreaView>
     )

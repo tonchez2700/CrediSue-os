@@ -1,80 +1,79 @@
-import React, { useState, useEffect, useContext } from 'react'
+import React, { useState, useEffect, useContext, useRef } from 'react'
 import {
-    StyleSheet, View, ScrollView, TouchableOpacity,
-    Text, Image
-
+    StyleSheet, View, ScrollView, TouchableOpacity, Text
 } from 'react-native';
-import Images from '@assets/images';
+import AnimetedText from '../components/AnimetedText';
 import { Icon, Button } from 'react-native-elements'
 import { useNavigation } from '@react-navigation/native';
-import { Context as AccountDataContext } from '../context/AccountDataContext';
+import { Context as PaymentsContext } from '../context/PaymentsContext';
 import tw from 'tailwind-react-native-classnames'
-import EntryList from '../components/EntryList';
-import moment from 'moment';
-import AsyncStorage from '@react-native-async-storage/async-storage';
 
 
 const PaymentsScreen = () => {
 
     const navigation = useNavigation();
+
     const { state,
         clearState,
-        setDataAccount,
-        setDataPayment
-    } = useContext(AccountDataContext);
+        TypeChange,
+        TypeSelection,
+    } = useContext(PaymentsContext);
+
 
     useEffect(() => {
-        setDataAccount()
-        setDataPayment()
-    }, []);
+        const unsubscribe = navigation.addListener('focus', () => {
+            clearState()
+        });
+        return unsubscribe;
+    }, [navigation]);
+
 
     return (
 
-        <View style={{ flex: 1, backgroundColor: '#ECECEC', padding: 17,paddingTop: 4 }}>
+        <View style={{ flex: 1, backgroundColor: '#ECECEC', padding: 17, paddingTop: 4 }}>
             <ScrollView>
                 <View style={[tw`my-5 px-5 py-5`, { backgroundColor: '#FFFFFF' }]}>
                     <Text style={styles.titlleText}>Selecciona tu método de pago</Text>
                     <TouchableOpacity
-                    
-                        style={styles.btnPayments}
-                        onPress={() => console.log(state.AccountState)}
+                        style={[styles.btnPayments, state.typePayment === 1 ? { backgroundColor: "#004480" } : null]}
+                        onPress={() => TypeChange(1)}
                     >
-                        <View style={[tw`flex-row`, { alignItems: 'center' }]}>
-                            <Image
-                                source={Images.speiA}
-                                accessible={true}
-                                style={{ width: 66, height: 20, marginRight: 10 }}
-                                resizeMode="contain"
-                            />
-                            <Text style={styles.btnText}>Transferencia electrónica</Text>
+                        <View style={[tw`flex-row`, { width: '100%', paddingHorizontal: 25, alignItems: 'center' }]}>
+                            <Icon
+                                size={30}
+                                name='credit-card'
+                                style={{ marginRight: 10 }}
+                                type='FontAwesome5'
+                                color={state.typePayment === 1 ? "white" : null} />
+                            <Text style={[styles.btnText, state.typePayment === 1 ? { color: "white" } : null]}>Tarjetas de débito o crédito</Text>
                         </View>
                     </TouchableOpacity>
                     <TouchableOpacity
-                        style={styles.btnPayments}
-                        onPress={() => console.log(state.AccountState)}
+                        style={[styles.btnPayments, state.typePayment === 2 ? { backgroundColor: "#004480" } : null]}
+                        onPress={() => TypeChange(2)}
                     >
-                        <View style={[tw`flex-row`, { alignItems: 'center' }]}>
-                            <Image
-                                source={Images.visa}
-                                accessible={true}
-                                style={{ width: 66, height: 20, marginRight: 10 }}
-                                resizeMode="contain"
-                            />
-                            <Text style={styles.btnText}>Tarjetas de débito o crédito</Text>
+                        <View style={[tw`flex-row`, { width: '100%', paddingHorizontal: 25, alignItems: 'center' }]}>
+                            <Icon
+                                size={30}
+                                name='receipt'
+                                style={{ marginRight: 10 }}
+                                type='FontAwesome5'
+                                color={state.typePayment === 2 ? "white" : null} />
+                            <Text style={[styles.btnText, state.typePayment === 2 ? { color: "white" } : null]}>Ficha de depósito</Text>
                         </View>
                     </TouchableOpacity>
                     <TouchableOpacity
-                        style={styles.btnPayments}
-                        onPress={() => console.log(state.AccountState)}
+                        style={[styles.btnPayments, state.typePayment === 3 ? { backgroundColor: "#004480" } : null]}
+                        onPress={() => TypeChange(3)}
                     >
-                        <View style={[tw`flex-row`, { alignItems: 'center' }]}>
-                            <Image
-                                source={Images.oPaynet}
-                                accessible={true}
-                                style={{ width: 66, height: 20, marginRight: 10 }}
-                                resizeMode="contain"
-                            />
-                            <Text style={styles.btnText}>Pagos en efectivo</Text>
+                        <View style={[tw`flex-row`, { width: '100%', paddingHorizontal: 25, alignItems: 'center' }]}>
+                            <Icon
+                                size={30}
+                                name='shop'
+                                style={{ marginRight: 10 }}
+                                type='entypo'
+                                color={state.typePayment === 3 ? "white" : null} />
+                            <Text style={[styles.btnText, state.typePayment === 3 ? { color: "white" } : null]}>Pago con efectivo en tiendas</Text>
                         </View>
 
                     </TouchableOpacity>
@@ -86,20 +85,33 @@ const PaymentsScreen = () => {
                         </View>
                         <View style={{ width: '60%' }}>
                             <Text style={{
-                                fontWeight: 'bold', textAlign: 'right', 
+                                fontWeight: 'bold', textAlign: 'right',
                                 fontSize: 19, color: '#004480',
                             }}>$999.99</Text>
                         </View>
                     </View>
-                    <Text style={styles.Atext}>Seleccione un método de pago para continuar</Text>
+
+                    {
+                        state.typePayment == ''
+                            ?
+                            <AnimetedText />
+                            :
+                            null
+                    }
+                    <Button
+                        onPress={() => TypeSelection(state.typePayment)}
+                        title={'Continuar'}
+                        titleStyle={{ color: 'white' }}
+                        buttonStyle={[styles.btnMenu, state.typePayment === '' ? { backgroundColor: '#686F75' } : { backgroundColor: '#004480' }, { marginTop: 30 }]}
+                    />
                     <Button
                         onPress={() => console.log(state.AccountState)}
                         title={'Cancelar'}
                         titleStyle={{ color: 'white' }}
-                        buttonStyle={styles.btnMenu}
+                        buttonStyle={[styles.btnMenu, { marginTop: 22, backgroundColor: '#686F75' }]}
                     />
                 </View>
-            </ScrollView>
+            </ScrollView >
         </View >
     )
 }
@@ -115,7 +127,6 @@ const styles = StyleSheet.create({
         marginBottom: 15
     },
     btnText: {
-        textAlign: 'left',
         fontSize: 15,
     },
     PaymentText: {
@@ -125,15 +136,6 @@ const styles = StyleSheet.create({
         marginVertical: 15
 
     },
-    Atext: {
-        backgroundColor: '#F6DA7B',
-        color: '#8B793B',
-        borderRadius: 5,
-        padding: 5,
-        paddingLeft: 19,
-        fontSize: 10
-
-    },
     btnPayments: {
         borderColor: '#F28000',
         alignItems: 'center',
@@ -141,13 +143,10 @@ const styles = StyleSheet.create({
         paddingVertical: 25,
         borderRadius: 10,
         marginVertical: 7,
-        backgroundColor: 'white'
     },
     btnMenu: {
         alignItems: 'center',
         paddingVertical: 15,
         borderRadius: 10,
-        marginTop:  44,
-        backgroundColor: '#686F75'
     },
 })
