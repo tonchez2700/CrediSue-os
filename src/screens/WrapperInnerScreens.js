@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useRef } from 'react'
-import { SafeAreaView, View, Alert , StyleSheet } from 'react-native'
+import { SafeAreaView, View, Alert, StyleSheet } from 'react-native'
 import { createDrawerNavigator, DrawerContentScrollView, DrawerItemList, DrawerItem, } from '@react-navigation/drawer';
 import { navigationRef } from '../helpers/rootNavigation';
 
@@ -12,6 +12,7 @@ import AccountStatementScreen from './AccountStatementScreen';
 import PaymentsScreen from './PaymentsScreen';
 import CashPaymentScreen from './CashPaymentScreen';
 import CardDepositScreen from './CardDepositScreen';
+import ChatScreen from './ChatScreen';
 
 import tw from 'tailwind-react-native-classnames';
 import Images from '@assets/images';
@@ -38,7 +39,7 @@ const WrapperInnerScreens = () => {
         return addUserNotificationToken(token)
       })
       .then(res => {
-        if(res.error){
+        if (res.error) {
           Alert.alert(
             "Error al configurar notificaciones",
             res.message,
@@ -130,6 +131,7 @@ const WrapperInnerScreens = () => {
             drawerContent={(props) => <CustomDrawerContent {...props} />}
             useLegacyImplementation>
             <Drawer.Screen name="Inicio" component={HomeScreen} />
+            <Drawer.Screen name="Chat" component={ChatScreen} />
             <Drawer.Screen name="PaymentsScreen" component={PaymentsScreen} />
             <Drawer.Screen name="CardPaymentScreen" component={CardPaymentScreen} />
             <Drawer.Screen name="CashPaymentScreen" component={CashPaymentScreen} />
