@@ -10,7 +10,6 @@ import * as OpenAnything from 'react-native-openanything';
 import { Context as AccountDataContext } from '../context/AccountDataContext';
 import tw from 'tailwind-react-native-classnames'
 import EntryList from '../components/EntryList';
-import moment from 'moment';
 
 
 const AccountStatementScreen = () => {

@@ -1,15 +1,17 @@
 import React, { useState, useEffect, useContext, useRef } from 'react'
 import {
-    StyleSheet, View, ScrollView, TouchableOpacity, Text
+    StyleSheet, View, ScrollView, TouchableOpacity, Text, TextInput
 } from 'react-native';
 import AnimetedText from '../components/AnimetedText';
+import MaskInput, { createNumberMask } from 'react-native-mask-input';
 import { Icon, Button } from 'react-native-elements'
 import { useNavigation } from '@react-navigation/native';
 import { Context as PaymentsContext } from '../context/PaymentsContext';
+import { Context as AccountDataContext } from '../context/AccountDataContext';
 import tw from 'tailwind-react-native-classnames'
 
 
-const PaymentsScreen = () => {
+const PaymentsScreen = (props) => {
 
     const navigation = useNavigation();
 
@@ -17,17 +19,30 @@ const PaymentsScreen = () => {
         clearState,
         TypeChange,
         TypeSelection,
+        AmountChange,
     } = useContext(PaymentsContext);
-
+    const { state: stateData } = useContext(AccountDataContext);
+    const dollarMask = createNumberMask({
+        delimiter: ',',
+        separator: '.',
+        precision: 0,
+    })
 
     useEffect(() => {
         const unsubscribe = navigation.addListener('focus', () => {
             clearState()
+
         });
         return unsubscribe;
     }, [navigation]);
 
-
+    useEffect(() => {
+        const unsubscribe = navigation.addListener('focus', () => {
+            AmountChange(stateData.StateAccount.PagoInicial, 'amount')
+        });
+        return unsubscribe;
+    }, [navigation]);
+    
     return (
 
         <View style={{ flex: 1, backgroundColor: '#ECECEC', padding: 17, paddingTop: 4 }}>
@@ -83,29 +98,45 @@ const PaymentsScreen = () => {
                                 textAlign: 'left', fontSize: 15,
                             }}>Total de pago </Text>
                         </View>
-                        <View style={{ width: '60%' }}>
+                        <View style={{ width: '60%', flexDirection: 'row-reverse' }}>
+                            {
+                                state.amount != "" ?
+                                    < MaskInput
+                                        style={{
+                                            fontWeight: 'bold', textAlign: 'right',
+                                            fontSize: 19, color: '#004480',
+                                        }}
+                                        value={state.amount}
+                                        mask={dollarMask}
+                                        keyboardType="numeric"
+                                        onChangeText={(masked, unmasked) => AmountChange(unmasked, 'amount')}
+                                    />
+                                    :
+                                    null
+                            }
                             <Text style={{
                                 fontWeight: 'bold', textAlign: 'right',
                                 fontSize: 19, color: '#004480',
-                            }}>$999.99</Text>
+                            }}>$</Text>
+
                         </View>
                     </View>
 
-                    {
+                    {/* {
                         state.typePayment == ''
                             ?
                             <AnimetedText />
                             :
                             null
-                    }
+                    } */}
                     <Button
-                        onPress={() => TypeSelection(state.typePayment)}
+                        onPress={() => TypeSelection(state.typePayment, props.route.params, stateData.StateAccount, stateData.AccountState, state.amount)}
                         title={'Continuar'}
                         titleStyle={{ color: 'white' }}
                         buttonStyle={[styles.btnMenu, state.typePayment === '' ? { backgroundColor: '#686F75' } : { backgroundColor: '#004480' }, { marginTop: 30 }]}
                     />
                     <Button
-                        onPress={() => console.log(state.AccountState)}
+                        onPress={() => navigation.goBack()}
                         title={'Cancelar'}
                         titleStyle={{ color: 'white' }}
                         buttonStyle={[styles.btnMenu, { marginTop: 22, backgroundColor: '#686F75' }]}
