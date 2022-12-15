@@ -13,8 +13,7 @@ import tw from 'tailwind-react-native-classnames'
 import moment from 'moment';
 
 const { width } = Dimensions.get('window');
-const CardPaymentScreen = () => {
-
+const CardPaymentScreen = (props) => {
     const navigation = useNavigation();
     const { state
     } = useContext(AccountDataContext);
@@ -24,7 +23,7 @@ const CardPaymentScreen = () => {
         <View style={{ flex: 1, backgroundColor: '#ECECEC', padding: 17, marginTop: 4, }}>
             <WebView
                 source={{
-                    uri: 'https://sandbox-api.openpay.mx/v1/mfdrqbmeydurvbqhspqx/charges/trmlu7rd9gkcqd1zcbvq/card_capture'
+                    uri: props.route.params.payment_method.url
                 }}
                 style={{ marginTop: 20 }}
             />

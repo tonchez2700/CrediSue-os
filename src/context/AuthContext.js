@@ -107,6 +107,7 @@ const tryAuth = async (email, password, dispatch) => {
     if (response != null) {
         const user = {
             username: response[0].username,
+            id_user: response[0].id_user,
             token: response[0].token,
             modulo: response[0].modulo,
             cuenta: response[0].cuenta,

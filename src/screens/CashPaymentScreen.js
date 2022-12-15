@@ -7,12 +7,15 @@ import { Icon, Button, Input } from 'react-native-elements'
 import { useNavigation } from '@react-navigation/native';
 import { Context as AccountDataContext } from '../context/AccountDataContext';
 import Images from '@assets/images';
-import MaskInput, { Masks } from 'react-native-mask-input';
+import Barcode from '@kichiyaki/react-native-barcode-generator';
 import tw from 'tailwind-react-native-classnames'
 import moment from 'moment';
 
 const { width } = Dimensions.get('window');
-const CashPaymentScreen = () => {
+const CashPaymentScreen = (props) => {
+
+    console.log(JSON.stringify(props.route.params, null, 2));
+    const { route: { params: { amount, customer, payment_method, agreement, currency } } } = props
 
     const navigation = useNavigation();
     const { state
@@ -30,7 +33,7 @@ const CashPaymentScreen = () => {
                 <Text style={{
                     fontWeight: 'bold', textAlign: 'center',
                     fontSize: 35, color: '#004480',
-                }}>$999.99 <Text style={{ color: '#004480', fontSize: 14 }}>MXM</Text></Text>
+                }}>${amount}<Text style={{ color: '#004480', fontSize: 14 }}>{currency}</Text></Text>
                 <Text style={styles.titlleText}>Monto en efectivo</Text>
                 <Text style={styles.titlle2Text}>Se cobrará una comisión adicional al momento de realizar el pago</Text>
                 <Image
@@ -40,8 +43,17 @@ const CashPaymentScreen = () => {
                     resizeMode="contain"
                 />
 
+                <View>
+                    <Barcode
+                        format="CODE128B"
+                        value={payment_method.barcode_url}
+                        maxWidth={(Dimensions.get('window').width * 2) / 3}
+                    />
+                </View>
+
+
                 <Text style={styles.titlleText}>No. de referencia</Text>
-                <Text style={styles.titlle2Text}>1234-5678-9012-34</Text>
+                <Text style={styles.titlle2Text}>{payment_method.reference}</Text>
 
                 <Text style={{ fontSize: 10, textAlign: 'center' }}>Al completar el pago recibirás un correo confirmando tu pago</Text>
 

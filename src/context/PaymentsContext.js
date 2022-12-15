@@ -5,10 +5,12 @@ import httpClient from '../services/httpClient'
 import * as rootNavigation from '../helpers/rootNavigation';
 import { INVITED_ENTRY_TYPE, PROVIDER_ENTRY_TYPE, SERVICE_ENTRY_TYPE } from '../config/defines';
 import moment from 'moment';
+import { Value } from 'react-native-reanimated';
 
 const initialState = {
     error: false,
     message: "",
+    amount: '',
     fetchingData: false,
     typePayment: '',
 }
@@ -34,6 +36,13 @@ const PaymentsReducer = (state = initialState, action) => {
                 ...state,
                 typePayment: action.payload.type
             }
+        case 'CHANGE_AMOUNT_PAYMENT':
+            let type = action.payload.type
+            let amount = toString(action.payload.num)
+            return {
+                ...state,
+                [type]: action.payload.num
+            }
         default:
             return state
     }
@@ -58,17 +67,127 @@ const TypeChange = (dispatch) => {
 
 
 const TypeSelection = (dispatch) => {
-    return async (type) => {
-        console.log(type);
+    return async (type, DatosPersonales, EstadoCuenta, Recibo, amount) => {
+        const user = JSON.parse(await AsyncStorage.getItem('user'));
+        const token = user.token;
+        const userID = user.userID;
+        const date = new Date();
+        const TodayDate = moment(DatosPersonales.FechaLimitePago).format('YYYY-MM-DD')
+        console.log(toda);
+        const idAccount = `${user.modulo}-${user.cuenta}-${moment(date).format('YYYY')}-${Recibo.NumRecibo}`;
+
         switch (type) {
             case 1:
-                rootNavigation.navigate('CardPaymentScreen');
+                const dataCard = {
+                    method: 'card',
+                    amount: amount,
+                    description: 'Cargo con banco',
+                    order_id: idAccount,
+                    due_date: TodayDate,
+                    customer:
+                    {
+                        name: DatosPersonales.nombre,
+                        email: Recibo.mail,
+                        phone_number: DatosPersonales.Celular,
+                        requires_account: false
+                    },
+                    confirm: false,
+                    send_email: false,
+                    redirect_url: 'http://www.openpay.mx/index.html'
+                }
+                const responseCard = await httpClient.post(
+                    `Credisuenos_Cargo_Tarjeta.php`,
+                    dataCard,
+                    {
+                        'Authorization': `Bearer ${token}`,
+                    }
+                );
+                if (!responseCard.error_code) {
+                    rootNavigation.navigate('CardPaymentScreen', responseCard);
+                } else {
+                    Alert.alert(
+                        "Advertencia",
+                        responseCard.description,
+                        [{
+                            text: "OK",
+                            onPress: clearState
+                        }]
+                    )
+                }
+
                 break;
             case 2:
-                rootNavigation.navigate('CardDepositScreen');
+
+                const dataCardDeposit = {
+                    method: 'bank_account',
+                    amount: amount,
+                    description: 'Cargo con tarjeta',
+                    order_id: idAccount,
+                    due_date: TodayDate,
+                    customer:
+                    {
+                        name: DatosPersonales.nombre,
+                        email: Recibo.mail,
+                        phone_number: DatosPersonales.Celular,
+                        requires_account: false,
+                    },
+                }
+                const responseCardDeposit = await httpClient.post(
+                    `Credisuenos_Cargo_Banco.php?${userID}`,
+                    dataCardDeposit,
+                    {
+                        'Authorization': `Bearer ${token}`,
+                    }
+                );
+                if (!responseCardDeposit.error_code) {
+                    rootNavigation.navigate('CardDepositScreen', responseCardDeposit);
+                } else {
+                    Alert.alert(
+                        "Advertencia",
+                        responseCardDeposit.description,
+                        [{
+                            text: "OK",
+                            onPress: clearState
+                        }]
+                    )
+                }
                 break;
             case 3:
-                rootNavigation.navigate('CashPaymentScreen');
+
+                const user = JSON.parse(await AsyncStorage.getItem('user'));
+                const dataCash = {
+                    method: 'store',
+                    amount: amount,
+                    description: 'cargo por tienda',
+                    order_id: idAccount,
+                    due_date: TodayDate,
+                    customer:
+                    {
+                        name: DatosPersonales.nombre,
+                        email: Recibo.mail,
+                        phone_number: DatosPersonales.Celular,
+                        requires_account: false,
+                    },
+                }
+                const responseCash = await httpClient.post(
+                    `Credisuenos_Cargo_Banco.php?${userID}`,
+                    dataCash,
+                    {
+                        'Authorization': `Bearer ${token}`,
+                    }
+                );
+                if (!responseCash.error_code) {
+                    rootNavigation.navigate('CashPaymentScreen', responseCash);
+                } else {
+                    Alert.alert(
+                        "Advertencia",
+                        responseCash.description,
+                        [{
+                            text: "OK",
+                            onPress: clearState
+                        }]
+                    )
+                }
                 break;
 
             default:
@@ -78,12 +197,30 @@ const TypeSelection = (dispatch) => {
 }
 
 
+const AmountChange = (dispatch) => {
+    return async (value, type) => {
+
+        let num = value
+        if (value == '' || value == undefined) {
+            num = '  '
+        } else {
+            num = value
+        }
+        dispatch({
+            type: 'CHANGE_AMOUNT_PAYMENT',
+            payload: { num, type }
+        })
+    }
+}
+
 export const { Context, Provider } = createDataContext(
     PaymentsReducer,
     {
         clearState,
         TypeChange,
         TypeSelection,
+        AmountChange
+
 
 
     },
