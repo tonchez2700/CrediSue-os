@@ -2,12 +2,12 @@ import React, { useState, useEffect, useContext, useRef } from 'react'
 import {
     StyleSheet, View, ScrollView, TouchableOpacity, Text, TextInput
 } from 'react-native';
-import AnimetedText from '../components/AnimetedText';
 import MaskInput, { createNumberMask } from 'react-native-mask-input';
 import { Icon, Button } from 'react-native-elements'
 import { useNavigation } from '@react-navigation/native';
 import { Context as PaymentsContext } from '../context/PaymentsContext';
 import { Context as AccountDataContext } from '../context/AccountDataContext';
+import ModalAlert from '../components/Modal/ModalAlert';
 import tw from 'tailwind-react-native-classnames'
 
 
@@ -22,6 +22,7 @@ const PaymentsScreen = (props) => {
         AmountChange,
     } = useContext(PaymentsContext);
     const { state: stateData } = useContext(AccountDataContext);
+
     const dollarMask = createNumberMask({
         delimiter: ',',
         separator: '.',
@@ -42,7 +43,7 @@ const PaymentsScreen = (props) => {
         });
         return unsubscribe;
     }, [navigation]);
-    
+
     return (
 
         <View style={{ flex: 1, backgroundColor: '#ECECEC', padding: 17, paddingTop: 4 }}>
@@ -132,6 +133,7 @@ const PaymentsScreen = (props) => {
                     <Button
                         onPress={() => TypeSelection(state.typePayment, props.route.params, stateData.StateAccount, stateData.AccountState, state.amount)}
                         title={'Continuar'}
+                        loading={state.fetchingData ? true : false}
                         titleStyle={{ color: 'white' }}
                         buttonStyle={[styles.btnMenu, state.typePayment === '' ? { backgroundColor: '#686F75' } : { backgroundColor: '#004480' }, { marginTop: 30 }]}
                     />
@@ -142,6 +144,13 @@ const PaymentsScreen = (props) => {
                         buttonStyle={[styles.btnMenu, { marginTop: 22, backgroundColor: '#686F75' }]}
                     />
                 </View>
+                {
+                    state.error === true
+                        ?
+                        <ModalAlert />
+                        :
+                        null
+                }
             </ScrollView >
         </View >
     )

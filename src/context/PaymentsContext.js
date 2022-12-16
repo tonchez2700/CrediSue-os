@@ -11,6 +11,7 @@ const initialState = {
     error: false,
     message: "",
     amount: '',
+    isVisible: false,
     fetchingData: false,
     typePayment: '',
 }
@@ -25,11 +26,13 @@ const PaymentsReducer = (state = initialState, action) => {
         case 'FETCHING_DATA':
             return { ...state, fetchingData: action.payload.fetchingData }
         case 'SET_REQUEST_ERROR':
+            let visible = !state.isVisible
             return {
                 ...state,
                 error: true,
                 message: action.payload.message,
-                fetchingData: false
+                fetchingData: false,
+                isVisible: visible
             }
         case 'CHANGE_TYPE_PAYMENT':
             return {
@@ -43,6 +46,16 @@ const PaymentsReducer = (state = initialState, action) => {
                 ...state,
                 [type]: action.payload.num
             }
+        case 'CHANGE_VISIBLE_MODAL':
+            let visibleCheck = !state.isVisible
+            return {
+                ...state,
+                error: false,
+                message: '',
+                fetchingData: false,
+                isVisible: visibleCheck
+            }
+
         default:
             return state
     }
@@ -68,12 +81,12 @@ const TypeChange = (dispatch) => {
 
 const TypeSelection = (dispatch) => {
     return async (type, DatosPersonales, EstadoCuenta, Recibo, amount) => {
+        dispatch({ type: 'FETCHING_DATA', payload: { fetchingData: true } });
         const user = JSON.parse(await AsyncStorage.getItem('user'));
         const token = user.token;
         const userID = user.userID;
         const date = new Date();
         const TodayDate = moment(DatosPersonales.FechaLimitePago).format('YYYY-MM-DD')
-        console.log(toda);
         const idAccount = `${user.modulo}-${user.cuenta}-${moment(date).format('YYYY')}-${Recibo.NumRecibo}`;
 
         switch (type) {
@@ -103,16 +116,14 @@ const TypeSelection = (dispatch) => {
                     }
                 );
                 if (!responseCard.error_code) {
+                    dispatch({ type: 'FETCHING_DATA', payload: { fetchingData: false } });
                     rootNavigation.navigate('CardPaymentScreen', responseCard);
                 } else {
-                    Alert.alert(
-                        "Advertencia",
-                        responseCard.description,
-                        [{
-                            text: "OK",
-                            onPress: clearState
-                        }]
-                    )
+                    let message = responseCard.description
+                    dispatch({
+                        type: 'SET_REQUEST_ERROR',
+                        payload: { message }
+                    })
                 }
 
                 break;
@@ -140,16 +151,14 @@ const TypeSelection = (dispatch) => {
                     }
                 );
                 if (!responseCardDeposit.error_code) {
+                    dispatch({ type: 'FETCHING_DATA', payload: { fetchingData: false } });
                     rootNavigation.navigate('CardDepositScreen', responseCardDeposit);
                 } else {
-                    Alert.alert(
-                        "Advertencia",
-                        responseCardDeposit.description,
-                        [{
-                            text: "OK",
-                            onPress: clearState
-                        }]
-                    )
+                    let message = responseCardDeposit.description
+                    dispatch({
+                        type: 'SET_REQUEST_ERROR',
+                        payload: { message }
+                    })
                 }
                 break;
             case 3:
@@ -177,16 +186,14 @@ const TypeSelection = (dispatch) => {
                     }
                 );
                 if (!responseCash.error_code) {
+                    dispatch({ type: 'FETCHING_DATA', payload: { fetchingData: false } });
                     rootNavigation.navigate('CashPaymentScreen', responseCash);
                 } else {
-                    Alert.alert(
-                        "Advertencia",
-                        responseCash.description,
-                        [{
-                            text: "OK",
-                            onPress: clearState
-                        }]
-                    )
+                    let message = responseCash.description
+                    dispatch({
+                        type: 'SET_REQUEST_ERROR',
+                        payload: { message }
+                    })
                 }
                 break;
 
@@ -196,6 +203,14 @@ const TypeSelection = (dispatch) => {
     }
 }
 
+const isVisibleModal = (dispatch) => {
+    return async (message) => {
+        dispatch({
+            type: 'CHANGE_VISIBLE_MODAL',
+            payload: { message }
+        })
+    }
+}
 
 const AmountChange = (dispatch) => {
     return async (value, type) => {
@@ -219,7 +234,8 @@ export const { Context, Provider } = createDataContext(
         clearState,
         TypeChange,
         TypeSelection,
-        AmountChange
+        AmountChange,
+        isVisibleModal,
 
 
 

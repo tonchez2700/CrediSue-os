@@ -16,6 +16,7 @@ const { width } = Dimensions.get('window');
 
 const CardDepositScreen = (props) => {
 
+    const { route: { params: { amount, customer, payment_method, agreement, currency } } } = props
     const navigation = useNavigation();
     const { state
     } = useContext(AccountDataContext);
