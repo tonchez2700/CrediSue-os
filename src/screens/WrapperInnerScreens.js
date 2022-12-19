@@ -92,10 +92,6 @@ const WrapperInnerScreens = () => {
             onPress={() => props.navigation.navigate('Inicio')}
           />
           <DrawerItem
-            label="Pagos"
-            onPress={() => props.navigation.navigate('PaymentsScreen')}
-          />
-          <DrawerItem
             label="Estado de Cuenta"
             onPress={() => props.navigation.navigate('AccountStatementScreen')}
           />
