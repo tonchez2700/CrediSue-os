@@ -29,7 +29,7 @@ export const configurePushNotification = async () => {
    */
   if (!Device.isDevice) {
     Alert.alert(
-      'Error al configurar las notificaciones', 
+      'Error al configurar las notificaciones',
       'No es posible recibir notificaciones push en un emulador, es necesario ejecutarlo en un dispositivo físico.'
     );
     return false;
