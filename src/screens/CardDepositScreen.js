@@ -14,25 +14,18 @@ import moment from 'moment';
 
 const { width } = Dimensions.get('window');
 
-const CardDepositScreen = () => {
+const CardDepositScreen = (props) => {
 
+    const { route: { params: { amount, customer, payment_method, agreement, currency } } } = props
     const navigation = useNavigation();
     const { state
     } = useContext(AccountDataContext);
-    const [creditCard, setCreditCard] = React.useState('');
-    const [DateCard, setDateCard] = React.useState('');
-    const [CVV, setCVV] = React.useState('123');
-    const creditCardMask = [/\d/, /\d/, " / ", /\d/, /\d/, /\d/, /\d/];
 
     return (
         <View style={{ flex: 1, backgroundColor: '#ECECEC', padding: 17, marginTop: 4, }}>
             <ScrollView style={{ backgroundColor: '#FFFFFF', width: '100%', padding: 19 }}>
-                <Text style={{
-                    fontWeight: 'bold', textAlign: 'center',
-                    fontSize: 35, color: '#004480',
-                }}>$999.99 <Text style={{ color: '#004480', fontSize: 14 }}>MXM</Text></Text>
-                <Text style={styles.titlleText}>Monto en efectivo</Text>
-                <Text style={styles.titlle2Text}>Se cobrará una comisión adicional al momento de realizar el pago</Text>
+                <Text style={styles.titlleText}>Ficha de deposito</Text>
+
                 <Image
                     source={Images.logo}
                     accessible={true}
@@ -40,18 +33,22 @@ const CardDepositScreen = () => {
                     resizeMode="contain"
                 />
 
-                <Text style={styles.titlleText}>No. de referencia</Text>
-                <Text style={styles.titlle2Text}>1234-5678-9012-34</Text>
+                <View style={{ borderColor: '#F28000', borderWidth: 2, padding: 5, borderRadius: 4, borderStyle: 'dashed' }}>
+                    <Image
+                        source={Images.bbvaLogo}
+                        accessible={true}
+                        style={{ width: 150, height: 40, marginVertical: 10, marginBottom: 18, alignSelf: 'flex-start' }}
+                        resizeMode="contain"
+                    />
+                    <Text style={styles.RefereText}>Tipo de moneda: <Text style={styles.Refere2Text}>{currency}</Text></Text>
+                    <Text style={styles.RefereText}>No. de referencia: <Text style={styles.Refere2Text}>{payment_method.agreement}</Text></Text>
+                    <Text style={styles.RefereText}>Clabe: <Text style={styles.Refere2Text}>{payment_method.clabe}</Text></Text>
+                    <Text style={styles.RefereText}>Titular: <Text style={styles.Refere2Text}>{customer.name}</Text></Text>
+                    <Text style={styles.RefereText}>Cantidad a depositar: <Text style={styles.Refere2Text}>$ {amount}</Text></Text>
 
-                <Text style={{ fontSize: 10, textAlign: 'center' }}>Al completar el pago recibirás un correo confirmando tu pago</Text>
-
-                <Text style={styles.InsText}>Instrucciones:</Text>
-
-                <Text style={styles.InsDataText}>1.- Lorem ipsum dolor sit amet, consectetur adipiscing elit.</Text>
-                <Text style={styles.InsDataText}>2.- Nunc sagittis eleifend lorem, quis libero interdum nec.</Text>
-                <Text style={styles.InsDataText}>3.- Donec et hendrerit enim, sed dictum enim.</Text>
-                <Text style={styles.InsDataText}>4.- Sed a elit commodo, tincidunt ex id, volutpat dolor.</Text>
-                <Text style={styles.InsDataText}>5.- In hac habitasse platea dictumst. Nam ut mauris eu enim scelerisque consequat.</Text>
+                    <Text style={{ fontSize: 10, textAlign: 'center', marginVertical: 10 }}>Al completar el pago recibirás un correo confirmando tu pago</Text>
+                </View>
+                <Text style={styles.titlle2Text}>Se cobrará una comisión adicional al momento de realizar el pago</Text>
                 <Button
                     onPress={() => {
                         navigation.navigate('PaymentsScreen')
@@ -71,14 +68,24 @@ const styles = StyleSheet.create({
 
     titlleText: {
         textAlign: 'center',
-        fontSize: 15,
+        fontSize: 25,
         fontWeight: 'bold',
         marginBottom: 15
     },
     titlle2Text: {
         textAlign: 'center',
         fontSize: 11,
-        marginBottom: 15
+        marginVertical: 15
+    },
+    RefereText: {
+        fontSize: 17,
+        paddingLeft: 10,
+        fontWeight: 'bold',
+    },
+    Refere2Text: {
+        paddingLeft: 10,
+        fontSize: 13,
+        marginBottom: 15,
     },
     InputText: {
         textAlign: 'left',

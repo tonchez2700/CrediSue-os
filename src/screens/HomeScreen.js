@@ -75,7 +75,7 @@ const HomeScreen = () => {
                                         <Text style={{ textAlign: 'center', padding: 20, fontSize: 20, color: '#EE3232', fontWeight: 'bold' }}>{state.data?.MensajeSugerido}</Text>
                                         <Button
                                             onPress={() => {
-                                                navigation.navigate('PaymentsScreen')
+                                                navigation.navigate('PaymentsScreen', state.data)
                                             }}
                                             title={'Realizar el pago'}
                                             buttonStyle={{ backgroundColor: '#004480', marginHorizontal: 10, borderRadius: 9 }}
