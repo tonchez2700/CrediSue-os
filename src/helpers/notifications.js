@@ -1,4 +1,4 @@
-import { Platform } from 'react-native';
+import { Platform, Alert } from 'react-native';
 import * as Notifications from 'expo-notifications';
 import * as Device from 'expo-device';
 
@@ -28,7 +28,10 @@ export const configurePushNotification = async () => {
    * Verify if is physical device
    */
   if (!Device.isDevice) {
-    Alert.alert('No es posible recibir notificaciones push en un emulador, es necesario ejecutarlo en un dispositivo físico.');
+    Alert.alert(
+      'Error al configurar las notificaciones',
+      'No es posible recibir notificaciones push en un emulador, es necesario ejecutarlo en un dispositivo físico.'
+    );
     return false;
   }
 
@@ -37,7 +40,10 @@ export const configurePushNotification = async () => {
    */
   const hasPerm = await requireNotificationPermissions();
   if (!hasPerm) {
-    Alert.alert('No se otorgaron los permisos necesarios para las notificaciones.');
+    Alert.alert(
+      'Error al configurar las notificaciones',
+      'No se otorgaron los permisos necesarios para las notificaciones.'
+    );
     return false;
   }
 
