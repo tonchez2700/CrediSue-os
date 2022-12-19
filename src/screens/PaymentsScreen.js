@@ -7,6 +7,7 @@ import { Icon, Button } from 'react-native-elements'
 import { useNavigation } from '@react-navigation/native';
 import { Context as PaymentsContext } from '../context/PaymentsContext';
 import { Context as AccountDataContext } from '../context/AccountDataContext';
+import AnimetedText from '../components/AnimetedText';
 import ModalAlert from '../components/Modal/ModalAlert';
 import tw from 'tailwind-react-native-classnames'
 
@@ -123,18 +124,19 @@ const PaymentsScreen = (props) => {
                         </View>
                     </View>
 
-                    {/* {
+                    {
                         state.typePayment == ''
                             ?
                             <AnimetedText />
                             :
                             null
-                    } */}
+                    }
                     <Button
                         onPress={() => TypeSelection(state.typePayment, props.route.params, stateData.StateAccount, stateData.AccountState, state.amount)}
                         title={'Continuar'}
                         loading={state.fetchingData ? true : false}
                         titleStyle={{ color: 'white' }}
+                        disabled={state.typePayment === '' ? true : false}
                         buttonStyle={[styles.btnMenu, state.typePayment === '' ? { backgroundColor: '#686F75' } : { backgroundColor: '#004480' }, { marginTop: 30 }]}
                     />
                     <Button

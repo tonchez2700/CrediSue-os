@@ -17,6 +17,7 @@ const AnimetedText = ({ data }) => {
                 {
                     toValue: 1,
                     duration: 1000,
+                    useNativeDriver: true, // <-- Add this
                 }
             ).start();
         }, [fadeAnim])
