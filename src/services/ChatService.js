@@ -1,4 +1,4 @@
-import { db, doc, getDoc, getDocs, query, collection, setDoc, orderBy } from './../database/firebase';
+import { db, doc, getDoc, getDocs, onSnapshot, query, collection, setDoc, orderBy } from './../database/firebase';
 
 export const addChatMessage = async (userId, chatData) => {
   try {
@@ -33,6 +33,18 @@ export const getChatMessagesByUserId = async (userId) => {
   }
 }
 
+export const onSnapshotUserChatMessages = async (userId, callback) => {
+  try {
+    const docRef = collection(db, 'chats', `user_${userId}`, 'messages');
+    const q = query(docRef, orderBy("createdAt", "desc"));
+
+    return onSnapshot(q, (doc) => callback( sanitizeChatResponse(doc) ));
+    
+  } catch (error) {
+    return { error: true, message: error.message }
+  }
+}
+
 const sanitizeChatResponse = (data) => {
   const d = formatChatResponse(data);
   return formatDates(d);
@@ -41,7 +53,7 @@ const sanitizeChatResponse = (data) => {
 const formatChatResponse = (data) => {
   let result = [];
   data.forEach((doc) => {
-    result = [ ...result, doc.data() ]
+    result = [...result, doc.data()]
 
   });
   return result;
@@ -49,12 +61,12 @@ const formatChatResponse = (data) => {
 
 const formatDates = (data, dateField = 'createdAt') => {
   data.forEach(item => {
-    item.createdAt = new Date(item[dateField].seconds * 1000 + item[dateField].nanoseconds/1000000)
+    item.createdAt = new Date(item[dateField].seconds * 1000 + item[dateField].nanoseconds / 1000000)
   })
   return data;
 }
 
 const getUserIdFromKeyName = (keyName) => {
   const result = keyName.split("_")
-  return result[ result.length - 1 ]
+  return result[result.length - 1]
 }

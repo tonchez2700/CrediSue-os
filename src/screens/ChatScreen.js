@@ -1,13 +1,24 @@
 import { View } from 'react-native'
-import React, { useEffect, useCallback, useContext } from 'react'
+import React, { useEffect, useCallback, useContext, useRef } from 'react'
 import { GiftedChat } from 'react-native-gifted-chat'
 import { Context as ChatContext } from '../context/ChatContext';
 
 const ChatScreen = () => {
+  const chatListener = useRef(null);
   const { state, sendChatMessage, initChatData } = useContext(ChatContext);
 
   useEffect(() => {
-    initChatData();   
+    /**
+     * Add initial chat values and set the realtime listener
+     */
+    initChatData()
+      .then((res) => {
+        chatListener.current = res
+      })
+      .catch(error => console.log("Error al inicializar los datos del chat: ",error.message))
+
+    return () => chatListener.current();
+
   }, [])
 
   const onSend = useCallback((messages = []) => {

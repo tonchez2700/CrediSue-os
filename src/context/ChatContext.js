@@ -2,7 +2,7 @@
 
 import createDataContext from './createDataContext'
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { addChatMessage, getChatMessagesByUserId } from './../services/ChatService';
+import { addChatMessage, getChatMessagesByUserId, onSnapshotUserChatMessages } from './../services/ChatService';
 
 const initialState = {
   error: false,
@@ -54,18 +54,18 @@ const initChatData = (dispatch) => {
       /***
        * Fetch messagges from firebase
        */
-      const messages = await getChatMessagesByUserId(user.id_user);
-      dispatch({
-        type: 'SET_INITIAL_CHAT_DATA',
-        payload: {
-          currentUser: user,
-          messages
-        }
+      return onSnapshotUserChatMessages(user.id_user, (messages) => {
+        dispatch({
+          type: 'SET_INITIAL_CHAT_DATA',
+          payload: {
+            currentUser: user,
+            messages
+          }
+        });
       });
     } catch (error) {
       console.log("Ocurrio un error al inicializar los datos del chat: ", error.message)
     }
-
   }
 }
 
