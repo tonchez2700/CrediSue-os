@@ -27,10 +27,15 @@ export const getChatMessagesByUserId = async (userId) => {
     const docRef = collection(db, 'chats', `user_${userId}`, 'messages');
     const q = query(docRef, orderBy("createdAt", "desc"));
     const docSnap = await getDocs(q);
-    return formatChatResponse(docSnap);
+    return sanitizeChatResponse(docSnap);
   } catch (error) {
     return { error: true, message: error.message }
   }
+}
+
+const sanitizeChatResponse = (data) => {
+  const d = formatChatResponse(data);
+  return formatDates(d);
 }
 
 const formatChatResponse = (data) => {
@@ -40,6 +45,13 @@ const formatChatResponse = (data) => {
 
   });
   return result;
+}
+
+const formatDates = (data, dateField = 'createdAt') => {
+  data.forEach(item => {
+    item.createdAt = new Date(item[dateField].seconds * 1000 + item[dateField].nanoseconds/1000000)
+  })
+  return data;
 }
 
 const getUserIdFromKeyName = (keyName) => {
