@@ -12,8 +12,8 @@ const ChatScreen = () => {
      * Add initial chat values and set the realtime listener
      */
     initChatData()
-      .then((res) => {
-        chatListener.current = res
+      .then((onSnapshot) => {
+        chatListener.current = onSnapshot
       })
       .catch(error => console.log("Error al inicializar los datos del chat: ",error.message))
 
