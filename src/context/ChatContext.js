@@ -39,7 +39,6 @@ const sendChatMessage = (dispatch) => {
         const chatData = messages[0];
         const user = JSON.parse(await AsyncStorage.getItem('user'));
         await addChatMessage(user.id_user, chatData);
-        dispatch({ type: 'ADD_MESSAGE', payload: { message: chatData } });
       }
     } catch (error) {
       console.error("Error adding document: ", error);
