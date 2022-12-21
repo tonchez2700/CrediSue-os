@@ -1,56 +1,55 @@
 import React, { useContext } from 'react'
-import { StyleSheet, Text, View, Alert, ScrollView, Dimensions, ImageBackground, KeyboardAvoidingView } from 'react-native'
-import tw from 'tailwind-react-native-classnames';
-import { Icon, Input } from 'react-native-elements'
-import InputForm from '../components/Forms/InputForm';
-import ButtonFrom from '../components/Forms/ButtonFrom';
+import { StyleSheet, Text, View, Alert, ScrollView } from 'react-native'
+import { Icon } from 'react-native-elements'
 import { Context as AuthContext } from '../context/AuthContext';
+import { useNavigation } from '@react-navigation/native';
 import { AuthSchema } from './../config/schemas';
 import useHandleOnChangeTextInput from './../hooks/useHandleOnChangeTextInput';
+import tw from 'tailwind-react-native-classnames';
 import SimpleNavBar from '../components/SimpleNavBar'
-import { useNavigation } from '@react-navigation/native';
+import InputForm from '../components/Forms/InputForm';
+import ButtonFrom from '../components/Forms/ButtonFrom';
+import ModalRecovery from '../components/Modal/ModalRecovery';
 
 const AuthScreen = () => {
     const navigation = useNavigation();
-    const { state, signin, clearState } = useContext(AuthContext);
+    const { state, signin, clearState, isVisibleModal } = useContext(AuthContext);
     const [inputState, handleInputChange] = useHandleOnChangeTextInput(AuthSchema);
 
     return (
 
-
-        <View style={tw`h-full items-center`}>
-            <ScrollView contentContainerStyle={tw`items-center`}>
-
+        <View style={{ flex: 1 }}>
+            <ScrollView
+                contentContainerStyle={[tw`items-center flex-1`]}>
                 <SimpleNavBar />
-                <Text style={[tw`text-3xl mt-10 font-bold`, { color: '#004480' }]}>Bienvenido</Text>
-                <View style={tw`w-4/5 mt-8`}>
+                <View style={tw`w-4/5 mt-10`}>
                     <InputForm
                         maxLength={50}
                         name='username'
-                        placeholder='Correo electrónico'
-                        leftIcon={<Icon type='font-awesome' name='envelope' size={25} color='black' style={{ marginRight: 15 }} />}
+                        placeholder='USUARIO'
+                        leftIcon={<Icon type='Ionicons' name='person-outline' size={25} color='#D9D9D9' style={{ marginRight: 15 }} />}
                         inputContainerStyle={styles.input} keyboardType='email-address'
                         autoCapitalize='none'
                         onChangeText={(value) => handleInputChange(value, 'email')} />
                     <InputForm
                         maxLength={15}
                         name='password'
-                        leftIcon={<Icon type='font-awesome' name='lock' size={25} color='black' style={{ marginRight: 15 }} />}
+                        leftIcon={<Icon type='SimpleLineIcons' name='lock' size={25} color='#D9D9D9' style={{ marginRight: 15 }} />}
                         inputContainerStyle={styles.input}
-                        placeholder='Contraseña'
+                        placeholder='CONTRASEÑA'
                         secureTextEntry={true}
                         onChangeText={(value) => handleInputChange(value, 'password')} />
-
+                    <Text style={[tw`mb-10 font-bold `, { fontSize: 12, color: '#707070', textAlign: 'center' }]}>¿Olvidaste tu contraseña? Da click
+                        <Text onPress={() => isVisibleModal()} style={{ color: '#004480' }}> aquí.</Text></Text>
                     <ButtonFrom
                         handleSubmit={() => {
-                             signin(inputState);
+                            signin(inputState);
                         }}
                         loading={state.fetchingData ? true : false}
                     />
-                    <View style={tw`items-center`}>
-                        <Text style={[tw`text-xs mb-10 font-bold `, { color: '#707070' }]}>Al crear tu cuenta estas aceptando nuestros Términos de uso y Política de privacidad.</Text>
-                    </View>
+
                 </View>
+                <ModalRecovery />
                 {
                     state.error === true
                         ?
@@ -67,8 +66,11 @@ const AuthScreen = () => {
                 }
 
             </ScrollView>
-        </View>
-
+            <View style={{ paddingHorizontal: 70 }}>
+                <Text style={[tw`mb-10 font-bold `, { fontSize: 12, color: '#707070', textAlign: 'center' }]}>Al crear tu cuenta estas aceptando nuestros
+                    <Text style={{ color: '#004480', textAlign: 'center' }}> Términos de uso y Política de privacidad.</Text> </Text>
+            </View>
+        </View >
 
     )
 }

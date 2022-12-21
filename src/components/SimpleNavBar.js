@@ -8,7 +8,8 @@ const SimpleNavBar = () => {
         <Header
             backgroundColor="#004480"
             barStyle="default"
-            centerComponent={<Logo size='sm' />}
+            centerComponent={<Logo size='xs' />}
+            centerContainerStyle={{ paddingVertical: 55 }}
             leftContainerStyle={{ justifyContent: 'center' }}
             rightContainerStyle={{ justifyContent: 'center' }}
         />

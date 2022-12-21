@@ -28,7 +28,6 @@ const CardPaymentScreen = (props) => {
                     uri: props.route.params.payment_method.url
                 }}
                 onNavigationStateChange={(webViewState) => {
-                    console.log(webViewState)
                     if (webViewState.url != props.route.params.payment_method.url) {
                         //navigate or close webview
                         navigation.navigate('Inicio')

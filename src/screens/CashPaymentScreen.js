@@ -14,18 +14,11 @@ import moment from 'moment';
 const { width } = Dimensions.get('window');
 const CashPaymentScreen = (props) => {
 
-    console.log(JSON.stringify(props.route.params, null, 2));
     const { route: { params: { amount, customer, payment_method, agreement, currency } } } = props
 
     const navigation = useNavigation();
     const { state
     } = useContext(AccountDataContext);
-    const [creditCard, setCreditCard] = React.useState('');
-    const [DateCard, setDateCard] = React.useState('');
-    const [CVV, setCVV] = React.useState('123');
-
-    const creditCardMask = [/\d/, /\d/, " / ", /\d/, /\d/, /\d/, /\d/];
-
     return (
 
         <View style={{ flex: 1, backgroundColor: '#ECECEC', padding: 17, marginTop: 4, }}>
@@ -44,10 +37,11 @@ const CashPaymentScreen = (props) => {
                 />
 
                 <View>
-                    <Barcode
-                        format="CODE128B"
-                        value={payment_method.barcode_url}
-                        maxWidth={(Dimensions.get('window').width * 2) / 3}
+                    <Image
+                        source={{ uri: payment_method.barcode_url }}
+                        accessible={true}
+                        style={{ width: 259, height: 60, marginVertical: 10, marginBottom: 18, alignSelf: 'center' }}
+                        resizeMode="contain"
                     />
                 </View>
 
@@ -59,11 +53,19 @@ const CashPaymentScreen = (props) => {
 
                 <Text style={styles.InsText}>Instrucciones:</Text>
 
-                <Text style={styles.InsDataText}>1.- Lorem ipsum dolor sit amet, consectetur adipiscing elit.</Text>
-                <Text style={styles.InsDataText}>2.- Nunc sagittis eleifend lorem, quis libero interdum nec.</Text>
-                <Text style={styles.InsDataText}>3.- Donec et hendrerit enim, sed dictum enim.</Text>
-                <Text style={styles.InsDataText}>4.- Sed a elit commodo, tincidunt ex id, volutpat dolor.</Text>
-                <Text style={styles.InsDataText}>5.- In hac habitasse platea dictumst. Nam ut mauris eu enim scelerisque consequat.</Text>
+                <Text style={styles.InsDataText}>1.- Acude a cualquier tienda afiliada.</Text>
+                <Text style={styles.InsDataText}>2.- Entrega al cajero el código de barras y menciona que realizarás un pago de servicio paynet.</Text>
+                <Text style={styles.InsDataText}>3.- Realizar el pago en efectivo por $(la cantidad) MXN.</Text>
+                <Text style={styles.InsDataText}>4.- Conserva el ticket para cualquier aclaración.</Text>
+
+                <Text style={styles.InsText}>Instrucciones para el cajero:</Text>
+                <Text style={styles.InsDataText}>1.- Ingresar al menú de pago de servicios.</Text>
+                <Text style={styles.InsDataText}>2.- Seleccionar Paynet.</Text>
+                <Text style={styles.InsDataText}>3.- Escanea el código de barras o ingresar el número de referencia.</Text>
+                <Text style={styles.InsDataText}>4.- Ingresa la cantidad total a pagar.</Text>
+                <Text style={styles.InsDataText}>5.- Confirma la transacción y entrega el ticket al cliente.</Text>
+
+
                 <Button
                     onPress={() => {
                         navigation.navigate('PaymentsScreen')
@@ -101,6 +103,6 @@ const styles = StyleSheet.create({
     InsDataText: {
         textAlign: 'left',
         fontSize: 12,
-        marginBottom: 2
+        marginBottom: 7
     },
 })

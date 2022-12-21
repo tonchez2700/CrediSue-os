@@ -49,6 +49,7 @@ const CardDepositScreen = (props) => {
                     <Text style={{ fontSize: 10, textAlign: 'center', marginVertical: 10 }}>Al completar el pago recibirás un correo confirmando tu pago</Text>
                 </View>
                 <Text style={styles.titlle2Text}>Se cobrará una comisión adicional al momento de realizar el pago</Text>
+               
                 <Button
                     onPress={() => {
                         navigation.navigate('PaymentsScreen')
@@ -56,7 +57,7 @@ const CardDepositScreen = (props) => {
                     title={'Continuar'}
                     buttonStyle={{ backgroundColor: '#004480', marginVertical: 30, borderRadius: 9 }}
                 />
-
+               
             </ScrollView >
         </View >
     )
@@ -95,6 +96,17 @@ const styles = StyleSheet.create({
     DataText: {
         textAlign: 'left',
         fontSize: 12,
+    },
+    InsText: {
+        textAlign: 'left',
+        fontSize: 15,
+        fontWeight: 'bold',
+        marginBottom: 2
+    },
+    InsDataText: {
+        textAlign: 'left',
+        fontSize: 12,
+        marginBottom: 7
     },
     InputPayments: {
         borderWidth: 1,

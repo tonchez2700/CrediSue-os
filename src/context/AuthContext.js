@@ -11,6 +11,7 @@ const initialState = {
   message: null,
   fetchingData: false,
   user: null,
+  isVisible: false
 }
 
 const loginReducer = (state = initialState, action) => {
@@ -51,6 +52,13 @@ const loginReducer = (state = initialState, action) => {
         fetchingData: false,
         user: null
       }
+    case 'CHANGE_VISIBLE_MODAL':
+      let visibleCheck = !state.isVisible
+      return {
+        ...state,
+        isVisible: visibleCheck
+      }
+
     default:
       return state
   }
@@ -148,6 +156,13 @@ const tryAuth = async (email, password, dispatch) => {
   }
 }
 
+const isVisibleModal = (dispatch) => {
+  return async () => {
+    dispatch({
+      type: 'CHANGE_VISIBLE_MODAL',
+    })
+  }
+}
 export const { Context, Provider } = createDataContext(
   loginReducer,
   {
@@ -155,7 +170,8 @@ export const { Context, Provider } = createDataContext(
     signout,
     clearState,
     tryLocalSignin,
-    addUserNotificationToken
+    addUserNotificationToken,
+    isVisibleModal
   },
   initialState
 );

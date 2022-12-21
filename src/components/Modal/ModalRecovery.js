@@ -1,28 +1,25 @@
 import React, { useState, useEffect, useContext } from 'react'
 import { StyleSheet, Text, View, Modal, Pressable, Dimensions } from 'react-native'
 import { useNavigation } from '@react-navigation/native';
-import { Context as PaymentsContext } from '../../context/PaymentsContext';
+import { Context as AuthContext } from '../../context/AuthContext';
 import tw from 'tailwind-react-native-classnames'
-import { Icon, Button } from 'react-native-elements'
+import { Icon, Button, Input } from 'react-native-elements'
 
 
 const { width } = Dimensions.get("window");
-const ModalAlert = () => {
+const ModalRecovery = () => {
 
     const navigation = useNavigation();
+    const { state, isVisibleModal, handleInputChange } = useContext(AuthContext);
 
-    const { state,
-        clearState,
-        isVisibleModal
-    } = useContext(PaymentsContext);
 
-    useEffect(() => {
-        const unsubscribe = navigation.addListener('focus', () => {
-            clearState()
+    // useEffect(() => {
+    //     const unsubscribe = navigation.addListener('focus', () => {
+    //         clearState()
+    //     });
+    //     return unsubscribe;
+    // }, [navigation]);
 
-        });
-        return unsubscribe;
-    }, [navigation]);
     return (
         <View style={styles.body}>
             <Modal
@@ -36,33 +33,49 @@ const ModalAlert = () => {
                 }>
                 <View style={styles.viewWrapper}>
                     <View style={styles.modalView}>
-                        <Text style={styles.text}>Ocurrió un problema!</Text>
-                        <Text style={styles.textbody}>{state.message}</Text>
-                        <View >
+                        <Text style={styles.text}>Necesitamos verificar su identidad</Text>
+                        <Input
+                            value=''
+                            inputContainerStyle={styles.input}
+                            placeholder={'USUARIO'}
+                            onChangeText={(value) => handleInputChange(value, 'email')}
+                        />
+                        <View style={[tw`flex-row`, { justifyContent: 'space-between', width: '100%' }]}>
                             <Button
-                                onPress={() => {
-                                    isVisibleModal()
-                                }}
-                                titleStyle={{ fontSize: 17 }}
-                                title={'Aceptar'}
-                                buttonStyle={{ backgroundColor: '#004480', borderRadius: 9, width: '100%' }}
-                            />
+                                title="Cancelar"
+                                buttonStyle={{ marginLeft: 5, width: '80%', backgroundColor: '#848484' }}
+                                onPress={() => isVisibleModal()} />
+
+                            <Button
+                                title="Enviar"
+                                buttonStyle={{ width: '80%', backgroundColor: '#004480' }}
+                                onPress={() => { isVisibleModal() }} />
                         </View>
                     </View>
                 </View>
-            </Modal>
-        </View>
+            </Modal >
+        </View >
     )
 }
 
-export default ModalAlert
+export default ModalRecovery
 
 const styles = StyleSheet.create({
 
     text: {
         color: '#004480',
         fontWeight: 'bold',
-        fontSize: 25,
+        fontSize: 17,
+    },
+    input: {
+        backgroundColor: 'white',
+        padding: 9,
+        borderBottomColor: 'gray',
+        paddingLeft: 20,
+        borderRadius: 5,
+        elevation: 5,
+        backgroundColor: 'white',
+        borderBottomColor: 'white'
     },
     textbody: {
         color: 'black',

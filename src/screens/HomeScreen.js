@@ -158,14 +158,4 @@ const styles = StyleSheet.create({
         fontWeight: 'bold',
         color: 'white',
     },
-    TextTableItems: {
-        fontSize: 13,
-        padding: 10,
-        textAlign: 'center',
-        fontWeight: 'bold',
-        color: '#000000',
-        borderBottomColor: '#E6E6E6',
-        borderBottomWidth: 1
-
-    },
 })

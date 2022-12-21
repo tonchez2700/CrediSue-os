@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useContext } from 'react'
 import {
     StyleSheet, View, ScrollView, TouchableOpacity,
-    Text, FlatList, Image
+    Text, Image
 
 } from 'react-native';
 import { Icon, Button } from 'react-native-elements'

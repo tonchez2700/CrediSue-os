@@ -13,11 +13,11 @@ const EntryList = ({ data }) => {
         <View>
             {
                 data.map((e) =>
-                <View key={e.NumRecibo} style={[tw`flex-row`, { backgroundColor: 'white' }]}>
-                <Text style={[styles.TextTableItems, { width: '25%' }]}>{e.NumRecibo}</Text>
-                <Text style={[styles.TextTableItems, { width: '50%' }]}>{moment(e.FechaCobro).format('DD/MM/YYYY')}</Text>
-                <Text style={[styles.TextTableItems, { width: '25%' }]}>${e.Importe}</Text>
-            </View>
+                    <View key={e.NumRecibo} style={[tw`flex-row`, { backgroundColor: 'white' }]}>
+                        <Text style={[styles.TextTableItems, { width: '25%' }]}>{e.NumRecibo}</Text>
+                        <Text style={[styles.TextTableItems, { width: '50%' }]}>{moment(e.FechaCobro).format('DD/MM/YYYY')}</Text>
+                        <Text style={[styles.TextTableItems, { width: '25%' }]}>${e.Importe}</Text>
+                    </View>
                 )
             }
         </View>
