@@ -1,12 +1,12 @@
 
 
 import createDataContext from './createDataContext'
-import httpClient from '../services/httpClient'
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import * as rootNavigation from '../helpers/rootNavigation';
+import { addChatMessage, getChatMessagesByUserId, onSnapshotUserChatMessages } from './../services/ChatService';
 
 const initialState = {
   error: false,
+  currentUser: null,
   fetchingData: false,
   messages: [],
 }
@@ -16,10 +16,10 @@ const chatReducer = (state = initialState, action) => {
   switch (action.type) {
     case 'CLEAR_STATE':
       return initialState
-    case 'SET_USER_CHAT_HISTORY':
-      return { ...state, messages: action.payload.messages  }
+    case 'SET_INITIAL_CHAT_DATA':
+      return { ...state, messages: action.payload.messages, currentUser: action.payload.currentUser }
     case 'ADD_MESSAGE':
-      return { ...state, messages: [ action.payload.message, ...state.messages ]  }
+      return { ...state, messages: [action.payload.message, ...state.messages] }
     default:
       return state
   }
@@ -32,41 +32,44 @@ const clearState = (dispatch) => {
   }
 }
 
-const onSendMessage = (dispatch) => {
-  return async (message) => {
-    /**
-     * Add messages to firebase
-     */
-    dispatch({ type: 'ADD_MESSAGE', payload: { message: message[0] } });
+const sendChatMessage = (dispatch) => {
+  return async (messages) => {
+    try {
+      if(messages.length > 0){
+        const chatData = messages[0];
+        const user = JSON.parse(await AsyncStorage.getItem('user'));
+        await addChatMessage(user.id_user, chatData);
+      }
+    } catch (error) {
+      console.error("Error adding document: ", error);
+    }
   }
 }
 
-const fetchUserChatHistory = (dispatch) => {
+const initChatData = (dispatch) => {
   return async () => {
-
-    /***
-     * Fetch messagges from firebase
-     */
-    const messages = [
-      {
-        _id: 1,
-        text: 'Hello developer',
-        createdAt: new Date(),
-        user: {
-          _id: 2,
-          name: 'React Native',
-          avatar: 'https://placeimg.com/140/140/any',
-        },
-      },
-    ];
-
-    dispatch({ type: 'SET_USER_CHAT_HISTORY', payload: { messages } });
-
+    try {
+      const user = JSON.parse(await AsyncStorage.getItem('user'));
+      /***
+       * Fetch messagges from firebase
+       */
+      return onSnapshotUserChatMessages(user.id_user, (messages) => {
+        dispatch({
+          type: 'SET_INITIAL_CHAT_DATA',
+          payload: {
+            currentUser: user,
+            messages
+          }
+        });
+      });
+    } catch (error) {
+      console.log("Ocurrio un error al inicializar los datos del chat: ", error.message)
+    }
   }
 }
 
 export const { Context, Provider } = createDataContext(
   chatReducer,
-  { onSendMessage, fetchUserChatHistory },
+  { sendChatMessage, initChatData },
   initialState
 );

@@ -13,6 +13,7 @@ import PaymentsScreen from './PaymentsScreen';
 import CashPaymentScreen from './CashPaymentScreen';
 import CardDepositScreen from './CardDepositScreen';
 import QuestionsMarkScreen from './QuestionsMarkScreen';
+import ChatScreen from './ChatScreen';
 
 import tw from 'tailwind-react-native-classnames';
 import Images from '@assets/images';
@@ -131,6 +132,7 @@ const WrapperInnerScreens = () => {
             drawerContent={(props) => <CustomDrawerContent {...props} />}
             useLegacyImplementation>
             <Drawer.Screen name="Inicio" component={HomeScreen} />
+            <Drawer.Screen name="Chat" component={ChatScreen} />
             <Drawer.Screen name="PaymentsScreen" component={PaymentsScreen} />
             <Drawer.Screen name="QuestionsMarkScreen" component={QuestionsMarkScreen} />
             <Drawer.Screen name="CardPaymentScreen" component={CardPaymentScreen} />
