@@ -9,14 +9,15 @@ import { Context as AccountDataContext } from '../context/AccountDataContext';
 import tw from 'tailwind-react-native-classnames'
 import EntryList from '../components/EntryList';
 import moment from 'moment';
-const HomeScreen = () => {
 
+const HomeScreen = () => {
     const navigation = useNavigation();
     const { state,
         clearState,
         setDataAccount,
         setDataPayment,
-        setDataState
+        setDataState,
+        checkStatusPayment
     } = useContext(AccountDataContext);
 
     useEffect(() => {
@@ -24,6 +25,7 @@ const HomeScreen = () => {
             setDataAccount()
             setDataPayment()
             setDataState()
+            checkStatusPayment()
         });
         return unsubscribe;
 
@@ -35,7 +37,7 @@ const HomeScreen = () => {
             <View style={{ flex: 1, backgroundColor: '#ECECEC', justifyContent: 'flex-start', padding: 10 }}>
                 <ScrollView>
                     <View style={tw`my-5`}>
-                        <Text style={{ textAlign: 'center', fontWeight: 'bold', marginVertical: 8, fontSize: 19 }}>Bienvenido "Usuario 001"</Text>
+                        <Text style={{ textAlign: 'center', fontWeight: 'bold', marginVertical: 8, fontSize: 19 }}>Bienvenido {state.data?.nombre}</Text>
                         <View style={[tw`p-2 `, {
                             shadowColor: 'black',
                             shadowOpacity: 0.26,
@@ -49,11 +51,11 @@ const HomeScreen = () => {
                             <View style={tw`flex-col  justify-between p-5`}>
                                 <View style={[tw`flex-row`, { marginVertical: 1 }]}>
                                     <Text style={styles.TextItems}>Sucursal:</Text>
-                                    <Text style={{ textAlign: 'left', width: '50%' }}>{state.data?.Municipio}</Text>
+                                    <Text style={{ textAlign: 'left', width: '50%' }}>{state.data?.Modulo}</Text>
                                 </View>
                                 <View style={[tw`flex-row`, { marginVertical: 1 }]}>
                                     <Text style={styles.TextItems}>No de cuenta:</Text>
-                                    <Text style={{ textAlign: 'left', width: '50%' }}>{state.data?.num_cuenta}</Text>
+                                    <Text style={{ textAlign: 'left', width: '50%' }}>{state.data?.cuenta}</Text>
                                 </View>
                                 <View style={[tw`flex-row`, { marginVertical: 1 }]}>
                                     <Text style={styles.TextItems}>Artículo:</Text>
@@ -69,16 +71,16 @@ const HomeScreen = () => {
                                 </View>
                             </View>
                             {
-                                state.AccountState.EstatusRecibo != 1
+                                state.AccountState.EstatusRecibo == 1 || state.data == null
                                     ?
                                     <View>
-                                        <Text style={{ textAlign: 'center', padding: 20, fontSize: 20, color: '#EE3232', fontWeight: 'bold' }}>{state.data?.MensajeSugerido}</Text>
+                                        <Text style={{ paddingHorizontal: 14, textAlign: 'center', fontSize: 20, color: '#EE3232', fontWeight: 'bold' }}>{state.data?.MensajeSugerido}</Text>
                                         <Button
                                             onPress={() => {
                                                 navigation.navigate('PaymentsScreen', state.data)
                                             }}
                                             title={'Realizar el pago'}
-                                            buttonStyle={{ backgroundColor: '#004480', marginHorizontal: 10, borderRadius: 9 }}
+                                            buttonStyle={{ backgroundColor: '#004480', marginHorizontal: 10, marginTop: 12, marginBottom: 42, borderRadius: 9 }}
                                         />
                                     </View>
                                     :
@@ -87,7 +89,7 @@ const HomeScreen = () => {
                         </View>
                     </View>
 
-                    <View style={tw`my-5`}>
+                    <View style={tw`my-1`}>
                         <View style={[tw`p-2 pb-6`, {
                             shadowColor: 'black',
                             shadowOpacity: 0.26,

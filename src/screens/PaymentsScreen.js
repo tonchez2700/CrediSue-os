@@ -100,7 +100,7 @@ const PaymentsScreen = (props) => {
                                 textAlign: 'left', fontSize: 15,
                             }}>Total de pago </Text>
                         </View>
-                        <View style={{ width: '60%', flexDirection: 'row-reverse' }}>
+                        <View style={{ width: '60%', flexDirection: 'row-reverse', alignItems: 'center' }}>
                             {
                                 state.amount != "" ?
                                     < MaskInput

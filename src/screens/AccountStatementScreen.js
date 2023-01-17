@@ -78,7 +78,7 @@ const AccountStatementScreen = () => {
                         OpenAnything.Pdf(`${state.StateAccount?.PDF_liga}`)
                     }}
                     title={'Descargar estado de cuenta'}
-                    buttonStyle={{ backgroundColor: '#F28000', marginHorizontal: 10 }}
+                    buttonStyle={{ backgroundColor: '#F28000', marginHorizontal: 30, }}
                 />
 
                 <View style={tw`my-5 px-3`}>

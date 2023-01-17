@@ -84,11 +84,10 @@ const TypeSelection = (dispatch) => {
         dispatch({ type: 'FETCHING_DATA', payload: { fetchingData: true } });
         const user = JSON.parse(await AsyncStorage.getItem('user'));
         const token = user.token;
-        const userID = user.userID;
+        const userID = user.id_user;
         const date = new Date();
         const TodayDate = moment(DatosPersonales.FechaLimitePago).format('YYYY-MM-DD')
         const idAccount = `${user.modulo}-${user.cuenta}-${moment(date).format('YYYY')}-${Recibo.NumRecibo}`;
-
         switch (type) {
             case 1:
                 const dataCard = {
@@ -117,7 +116,16 @@ const TypeSelection = (dispatch) => {
                 );
                 if (!responseCard.error_code) {
                     dispatch({ type: 'FETCHING_DATA', payload: { fetchingData: false } });
-                    rootNavigation.navigate('CardPaymentScreen', responseCard);
+                
+                    if (responseCard.status != 'cancelled') {
+                        rootNavigation.navigate('CardPaymentScreen', responseCard);
+                    } else {
+                        let message = responseCard.error_message
+                        dispatch({
+                            type: 'SET_REQUEST_ERROR',
+                            payload: { message }
+                        })
+                    }
                 } else {
                     let message = responseCard.description
                     dispatch({
@@ -125,10 +133,8 @@ const TypeSelection = (dispatch) => {
                         payload: { message }
                     })
                 }
-
                 break;
             case 2:
-
                 const dataCardDeposit = {
                     method: 'bank_account',
                     amount: amount,
@@ -152,7 +158,15 @@ const TypeSelection = (dispatch) => {
                 );
                 if (!responseCardDeposit.error_code) {
                     dispatch({ type: 'FETCHING_DATA', payload: { fetchingData: false } });
-                    rootNavigation.navigate('CardDepositScreen', responseCardDeposit);
+                    if (responseCardDeposit.status != 'cancelled') {
+                        rootNavigation.navigate('CardDepositScreen', responseCardDeposit);
+                    } else {
+                        let message = responseCardDeposit.error_message
+                        dispatch({
+                            type: 'SET_REQUEST_ERROR',
+                            payload: { message }
+                        })
+                    }
                 } else {
                     let message = responseCardDeposit.description
                     dispatch({
@@ -162,8 +176,6 @@ const TypeSelection = (dispatch) => {
                 }
                 break;
             case 3:
-
-                const user = JSON.parse(await AsyncStorage.getItem('user'));
                 const dataCash = {
                     method: 'store',
                     amount: amount,
@@ -185,9 +197,18 @@ const TypeSelection = (dispatch) => {
                         'Authorization': `Bearer ${token}`,
                     }
                 );
+                console.log(JSON.stringify(responseCash, null, 2));
                 if (!responseCash.error_code) {
                     dispatch({ type: 'FETCHING_DATA', payload: { fetchingData: false } });
-                    rootNavigation.navigate('CashPaymentScreen', responseCash);
+                    if (responseCash.status != 'cancelled') {
+                        rootNavigation.navigate('CashPaymentScreen', responseCash);
+                    } else {
+                        let message = responseCash.error_message
+                        dispatch({
+                            type: 'SET_REQUEST_ERROR',
+                            payload: { message }
+                        })
+                    }
                 } else {
                     let message = responseCash.description
                     dispatch({
@@ -196,7 +217,6 @@ const TypeSelection = (dispatch) => {
                     })
                 }
                 break;
-
             default:
                 break;
         }

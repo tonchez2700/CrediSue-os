@@ -34,9 +34,20 @@ const AccountDataReducer = (state = initialState, action) => {
                 fetchingData: false
             }
         case 'SET_REQUEST_DATA':
+            let datosPersonales = '';
+            if (action.payload.response != null) {
+                datosPersonales = action.payload.response[0]
+            } else {
+                Alert.alert(
+                    'Advertencia',
+                    'No tiene estado de cuenta.'
+                );
+                datosPersonales = ''
+            }
+            console.log(datosPersonales);
             return {
                 ...state,
-                data: action.payload.response[0],
+                data: datosPersonales,
                 AccountState: action.payload.AccountStatement[0],
                 fetchingData: false
             }
@@ -44,6 +55,13 @@ const AccountDataReducer = (state = initialState, action) => {
             return {
                 ...state,
                 payments: action.payload.response,
+                fetchingData: false
+            }
+        case 'SET_REQUEST_STATE_CHECK':
+            return {
+                ...state,
+                error: action.payload.response.error,
+                message: action.payload.response.message,
                 fetchingData: false
             }
         case 'SET_REQUEST_STATE':
@@ -57,6 +75,7 @@ const AccountDataReducer = (state = initialState, action) => {
     }
 
 }
+
 
 const clearState = (dispatch) => {
     return () => {
@@ -141,6 +160,42 @@ const setDataPayment = (dispatch) => {
     }
 }
 
+const checkStatusPayment = (dispatch) => {
+    return async () => {
+        try {
+            dispatch({ type: 'FETCHING_DATA', payload: { fetchingData: true } });
+            const user = JSON.parse(await AsyncStorage.getItem('user'));
+            const data = {
+                Modulo: user.modulo,
+                Cuenta: user.cuenta
+            }
+            const token = user.token;
+            const response = await httpClient.post(
+                'ws_entidad_credisuenos_pagos_revisa.php',
+                data,
+                {
+                    'Authorization': `Bearer ${token}`,
+                }
+            );
+            dispatch({
+                type: 'SET_REQUEST_STATE_CHECK',
+                payload: {
+                    response
+                }
+            })
+            console.log(response);
+        } catch (error) {
+            dispatch({
+                type: 'SET_REQUEST_ERROR',
+                payload: {
+                    error: true,
+                    message: 'Por el momento el servicio no está disponible, inténtelo mas tarde.'
+                }
+            })
+        }
+    }
+}
+
 
 const setDataState = (dispatch) => {
     return async () => {
@@ -195,6 +250,7 @@ export const { Context, Provider } = createDataContext(
         setDataPayment,
         setDataState,
         handleInputChange,
+        checkStatusPayment,
 
     },
     initialState

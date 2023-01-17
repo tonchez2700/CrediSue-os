@@ -68,7 +68,7 @@ const CashPaymentScreen = (props) => {
 
                 <Button
                     onPress={() => {
-                        navigation.navigate('PaymentsScreen')
+                        navigation.navigate('Inicio')
                     }}
                     title={'Continuar'}
                     buttonStyle={{ backgroundColor: '#004480', marginVertical: 30, borderRadius: 9 }}
