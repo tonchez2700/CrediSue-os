@@ -25,11 +25,12 @@ const HomeScreen = () => {
             setDataAccount()
             setDataPayment()
             setDataState()
-            checkStatusPayment()
+            // checkStatusPayment()
         });
         return unsubscribe;
 
     }, []);
+
     const colorTittle = state.AccountState?.EstatusRecibo != 1 ? '#F28000' : '#004480'
     const renderContent = () => {
 
@@ -71,7 +72,7 @@ const HomeScreen = () => {
                                 </View>
                             </View>
                             {
-                                state.AccountState.EstatusRecibo == 1 || state.data == null
+                                state.AccountState?.EstatusRecibo == 1 || state.data == null
                                     ?
                                     <View>
                                         <Text style={{ paddingHorizontal: 14, textAlign: 'center', fontSize: 20, color: '#EE3232', fontWeight: 'bold' }}>{state.data?.MensajeSugerido}</Text>

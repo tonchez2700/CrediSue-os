@@ -14,6 +14,7 @@ const initialState = {
     AccountState: '',
     StateAccount: '',
     data: '',
+    questions: '',
 
 }
 
@@ -35,21 +36,24 @@ const AccountDataReducer = (state = initialState, action) => {
             }
         case 'SET_REQUEST_DATA':
             let datosPersonales = '';
-            if (action.payload.response != null) {
+            let Recibo = '';
+            if (action.payload.response != null || action.payload.AccountStatement != null) {
+
                 datosPersonales = action.payload.response[0]
+                Recibo = action.payload.AccountStatement[0]
             } else {
                 Alert.alert(
                     'Advertencia',
                     'No tiene estado de cuenta.'
                 );
                 datosPersonales = ''
+                Recibo = ''
             }
-            console.log(datosPersonales);
             return {
                 ...state,
                 data: datosPersonales,
-                AccountState: action.payload.AccountStatement[0],
-                fetchingData: false
+                AccountState: Recibo,
+                fetchingData: false,
             }
         case 'SET_REQUEST_PAYMENTS':
             return {
@@ -68,6 +72,12 @@ const AccountDataReducer = (state = initialState, action) => {
             return {
                 ...state,
                 StateAccount: action.payload.response,
+                fetchingData: false
+            }
+        case 'SET_QUESTIONS':
+            return {
+                ...state,
+                questions: action.payload.response.preguntas,
                 fetchingData: false
             }
         default:
@@ -149,6 +159,7 @@ const setDataPayment = (dispatch) => {
                 }
             })
         } catch (error) {
+            ;
             dispatch({
                 type: 'SET_REQUEST_ERROR',
                 payload: {
@@ -230,6 +241,32 @@ const setDataState = (dispatch) => {
         }
     }
 }
+const setQuestions = (dispatch) => {
+    return async () => {
+        try {
+            dispatch({ type: 'FETCHING_DATA', payload: { fetchingData: true } });
+            const user = JSON.parse(await AsyncStorage.getItem('user'));
+            const token = user.token;
+            const response = await httpClient.get(`ws_entidad_credisuenos_preguntas_frecuentes.php`, {
+                'Authorization': `Bearer ${token}`,
+            });
+            dispatch({
+                type: 'SET_QUESTIONS',
+                payload: {
+                    response
+                }
+            })
+        } catch (error) {
+            dispatch({
+                type: 'SET_REQUEST_ERROR',
+                payload: {
+                    error: true,
+                    message: 'Por el momento el servicio no está disponible, inténtelo mas tarde.'
+                }
+            })
+        }
+    }
+}
 
 
 const handleInputChange = (dispatch) => {
@@ -251,6 +288,7 @@ export const { Context, Provider } = createDataContext(
         setDataState,
         handleInputChange,
         checkStatusPayment,
+        setQuestions,
 
     },
     initialState
