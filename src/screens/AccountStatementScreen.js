@@ -50,7 +50,7 @@ const AccountStatementScreen = () => {
                                 <Text style={{ textAlign: 'left', width: '50%' }}>{state.data?.Municipio}</Text>
                             </View>
                             <View style={[tw`flex-row`, { marginVertical: 1 }]}>
-                                <Text style={styles.TextItems}>No de cuenta:</Text>
+                                <Text style={styles.TextItems}>No de crédito:</Text>
                                 <Text style={{ textAlign: 'left', width: '50%' }}>{state.data?.num_cuenta}</Text>
                             </View>
                             <View style={[tw`flex-row`, { marginVertical: 1 }]}>
@@ -64,6 +64,10 @@ const AccountStatementScreen = () => {
                             <View style={[tw`flex-row`, { marginVertical: 1 }]}>
                                 <Text style={styles.TextItems}>Saldo actual:</Text>
                                 <Text style={{ textAlign: 'left', width: '50%' }}>${state.data?.SaldoActual}</Text>
+                            </View>
+                            <View style={[tw`flex-row`, { marginVertical: 1 }]}>
+                                <Text style={styles.TextItems}>Abono nominal:</Text>
+                                <Text style={{ textAlign: 'left', width: '50%' }}>${state.data?.AbonoRequerido}</Text>
                             </View>
                             <View style={[tw`flex-row`, { marginVertical: 1 }]}>
                                 <Text style={[styles.TextItems, { color: '#EE3232' }]}>Semanas de no pago:</Text>
@@ -98,9 +102,15 @@ const AccountStatementScreen = () => {
                             <Text style={[styles.TextTable, { width: '50%' }]}>Fecha</Text>
                             <Text style={[styles.TextTable, { width: '25%' }]}>Importe</Text>
                         </View>
-                        <EntryList
-                            data={state.payments}
-                        />
+                        {
+                            state.payments != null
+                                ?
+                                <EntryList
+                                    data={state.payments}
+                                />
+                                :
+                                null
+                        }
                     </View>
                 </View>
             </ScrollView>

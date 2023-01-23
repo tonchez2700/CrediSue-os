@@ -133,6 +133,7 @@ const tryAuth = async (email, password, dispatch) => {
   dispatch({ type: 'FETCHING_DATA', payload: { fetchingData: true } });
 
   const response = await httpClient.post('ws_entidad_credisuenos_users.php', { User: email, Pass: password })
+  console.log(response);
   if (response != null) {
     const user = {
       id_user: response[0].id_user,

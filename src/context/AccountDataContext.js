@@ -127,7 +127,7 @@ const setDataAccount = (dispatch) => {
                 type: 'SET_REQUEST_ERROR',
                 payload: {
                     error: true,
-                    message: 'Por el momento el servicio no está disponible, inténtelo mas tarde.'
+                    message: 'PersonalData NO FOUND'
                 }
             })
         }
@@ -164,7 +164,7 @@ const setDataPayment = (dispatch) => {
                 type: 'SET_REQUEST_ERROR',
                 payload: {
                     error: true,
-                    message: 'Por el momento el servicio no está disponible, inténtelo mas tarde.'
+                    message: 'Payments NO FOUND'
                 }
             })
         }
@@ -194,13 +194,12 @@ const checkStatusPayment = (dispatch) => {
                     response
                 }
             })
-            console.log(response);
         } catch (error) {
             dispatch({
                 type: 'SET_REQUEST_ERROR',
                 payload: {
                     error: true,
-                    message: 'Por el momento el servicio no está disponible, inténtelo mas tarde.'
+                    message: 'CheckStatus NO FOUND'
                 }
             })
         }
@@ -235,7 +234,7 @@ const setDataState = (dispatch) => {
                 type: 'SET_REQUEST_ERROR',
                 payload: {
                     error: true,
-                    message: 'Por el momento el servicio no está disponible, inténtelo mas tarde.'
+                    message: 'StateAccount NO FOUND'
                 }
             })
         }
@@ -261,7 +260,7 @@ const setQuestions = (dispatch) => {
                 type: 'SET_REQUEST_ERROR',
                 payload: {
                     error: true,
-                    message: 'Por el momento el servicio no está disponible, inténtelo mas tarde.'
+                    message: 'Question NO FOUND'
                 }
             })
         }

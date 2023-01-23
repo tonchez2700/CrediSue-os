@@ -55,7 +55,7 @@ const HomeScreen = () => {
                                     <Text style={{ textAlign: 'left', width: '50%' }}>{state.data?.Modulo}</Text>
                                 </View>
                                 <View style={[tw`flex-row`, { marginVertical: 1 }]}>
-                                    <Text style={styles.TextItems}>No de cuenta:</Text>
+                                    <Text style={styles.TextItems}>No de crédito:</Text>
                                     <Text style={{ textAlign: 'left', width: '50%' }}>{state.data?.cuenta}</Text>
                                 </View>
                                 <View style={[tw`flex-row`, { marginVertical: 1 }]}>
@@ -69,6 +69,10 @@ const HomeScreen = () => {
                                 <View style={[tw`flex-row`, { marginVertical: 1 }]}>
                                     <Text style={styles.TextItems}>Saldo actual:</Text>
                                     <Text style={{ textAlign: 'left', width: '50%' }}>${state.data?.SaldoActual}</Text>
+                                </View>
+                                <View style={[tw`flex-row`, { marginVertical: 1 }]}>
+                                    <Text style={styles.TextItems}>Abono nominal:</Text>
+                                    <Text style={{ textAlign: 'left', width: '50%' }}>${state.data?.AbonoRequerido}</Text>
                                 </View>
                             </View>
                             {
@@ -108,9 +112,17 @@ const HomeScreen = () => {
                                 <Text style={[styles.TextTable, { width: '50%', backgroundColor: colorTittle }]}>Fecha</Text>
                                 <Text style={[styles.TextTable, { width: '25%', backgroundColor: colorTittle }]}>Importe</Text>
                             </View>
-                            <EntryList
-                                data={state.payments}
-                            />
+
+                            {
+                                state.payments != null
+                                    ?
+                                    <EntryList
+                                        data={state.payments}
+                                    />
+                                    :
+                                    null
+                            }
+
                         </View>
                     </View>
 
@@ -136,6 +148,7 @@ const HomeScreen = () => {
                         containerStyle={{ width: 120 }}
                         buttonStyle={[{ backgroundColor: '#118ea6' }]}
                         title="Actualizar"
+                        loading={state.fetchingData ? true : false}
                         onPress={() => setDataAccount()}
                     />
                 </View>

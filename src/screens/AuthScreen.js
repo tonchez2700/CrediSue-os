@@ -1,4 +1,4 @@
-import React, { useContext } from 'react'
+import React, { useContext, useState } from 'react'
 import { StyleSheet, Text, View, Alert, ScrollView } from 'react-native'
 import { Icon } from 'react-native-elements'
 import { Context as AuthContext } from '../context/AuthContext';
@@ -13,9 +13,11 @@ import ModalRecovery from '../components/Modal/ModalRecovery';
 
 const AuthScreen = () => {
     const navigation = useNavigation();
+    const [showPassword, setShowPassword] = useState(false);
     const { state, signin, clearState, isVisibleModal } = useContext(AuthContext);
     const [inputState, handleInputChange] = useHandleOnChangeTextInput(AuthSchema);
 
+    console.log(inputState);
     return (
 
         <View style={{ flex: 1 }}>
@@ -26,6 +28,7 @@ const AuthScreen = () => {
                     <InputForm
                         maxLength={50}
                         name='username'
+
                         placeholder='USUARIO'
                         leftIcon={<Icon type='Ionicons' name='person-outline' size={25} color='#D9D9D9' style={{ marginRight: 15 }} />}
                         inputContainerStyle={styles.input} keyboardType='email-address'
@@ -34,10 +37,16 @@ const AuthScreen = () => {
                     <InputForm
                         maxLength={15}
                         name='password'
+                        rightIcon={showPassword
+                            ?
+                            <Icon onPress={() => setShowPassword(!showPassword)} type='font-awesome' name='eye' size={25} color='red' style={{ marginRight: 15 }} />
+                            :
+                            <Icon onPress={() => setShowPassword(!showPassword)} type='font-awesome' name='eye-slash' size={25} color='#D9D9D9' style={{ marginRight: 15 }} />
+                        }
                         leftIcon={<Icon type='SimpleLineIcons' name='lock' size={25} color='#D9D9D9' style={{ marginRight: 15 }} />}
                         inputContainerStyle={styles.input}
                         placeholder='CONTRASEÑA'
-                        secureTextEntry={true}
+                        secureTextEntry={!showPassword}
                         onChangeText={(value) => handleInputChange(value, 'password')} />
                     <Text style={[tw`mb-10 font-bold `, { fontSize: 12, color: '#707070', textAlign: 'center' }]}>¿Olvidaste tu contraseña? Da click
                         <Text onPress={() => isVisibleModal()} style={{ color: '#004480' }}> aquí.</Text></Text>

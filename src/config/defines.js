@@ -1,4 +1,4 @@
-export const apiUrlBase = 'https://webservices.franciscocaballero.com.mx'
+export const apiUrlBase = 'https://ws.holahogar.com.mx/usuario_app/'
 
 /**
  * Firebase defines
