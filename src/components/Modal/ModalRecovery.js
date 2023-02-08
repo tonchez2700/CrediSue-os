@@ -10,15 +10,15 @@ const { width } = Dimensions.get("window");
 const ModalRecovery = () => {
 
     const navigation = useNavigation();
-    const { state, isVisibleModal, handleInputChange } = useContext(AuthContext);
+    const { state, clearState, isVisibleModal, recoveryUser, handleInputChange } = useContext(AuthContext);
 
 
-    // useEffect(() => {
-    //     const unsubscribe = navigation.addListener('focus', () => {
-    //         clearState()
-    //     });
-    //     return unsubscribe;
-    // }, [navigation]);
+    useEffect(() => {
+        const unsubscribe = navigation.addListener('focus', () => {
+            clearState()
+        });
+        return unsubscribe;
+    }, [navigation]);
 
     return (
         <View style={styles.body}>
@@ -44,7 +44,7 @@ const ModalRecovery = () => {
                             <Button
                                 title="Cancelar"
                                 buttonStyle={{ marginLeft: 5, width: '80%', backgroundColor: '#848484' }}
-                                onPress={() => isVisibleModal()} />
+                                onPress={() => { recoveryUser(state.email), isVisibleModal() }} />
 
                             <Button
                                 title="Enviar"

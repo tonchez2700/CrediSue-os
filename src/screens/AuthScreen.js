@@ -17,7 +17,6 @@ const AuthScreen = () => {
     const { state, signin, clearState, isVisibleModal } = useContext(AuthContext);
     const [inputState, handleInputChange] = useHandleOnChangeTextInput(AuthSchema);
 
-    console.log(inputState);
     return (
 
         <View style={{ flex: 1 }}>

@@ -47,11 +47,11 @@ const AccountStatementScreen = () => {
                         <View style={tw`flex-col  justify-between p-5`}>
                             <View style={[tw`flex-row`, { marginVertical: 1 }]}>
                                 <Text style={styles.TextItems}>Sucursal:</Text>
-                                <Text style={{ textAlign: 'left', width: '50%' }}>{state.data?.Municipio}</Text>
+                                <Text style={{ textAlign: 'left', width: '50%' }}>{state.data?.Modulo}</Text>
                             </View>
                             <View style={[tw`flex-row`, { marginVertical: 1 }]}>
                                 <Text style={styles.TextItems}>No de crédito:</Text>
-                                <Text style={{ textAlign: 'left', width: '50%' }}>{state.data?.num_cuenta}</Text>
+                                <Text style={{ textAlign: 'left', width: '50%' }}>{state.data?.cuenta}</Text>
                             </View>
                             <View style={[tw`flex-row`, { marginVertical: 1 }]}>
                                 <Text style={styles.TextItems}>Artículo:</Text>

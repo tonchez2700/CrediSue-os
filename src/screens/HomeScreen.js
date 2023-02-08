@@ -28,12 +28,11 @@ const HomeScreen = () => {
             // checkStatusPayment()
         });
         return unsubscribe;
-
     }, []);
 
-    const colorTittle = state.AccountState?.EstatusRecibo != 1 ? '#F28000' : '#004480'
-    const renderContent = () => {
+    const colorTittle = state.AccountState?.EstatusRecibo == 1 ? '#F28000' : '#004480'
 
+    const renderContent = () => {
         return (
             <View style={{ flex: 1, backgroundColor: '#ECECEC', justifyContent: 'flex-start', padding: 10 }}>
                 <ScrollView>
@@ -79,7 +78,7 @@ const HomeScreen = () => {
                                 state.AccountState?.EstatusRecibo == 1 || state.data == null
                                     ?
                                     <View>
-                                        <Text style={{ paddingHorizontal: 14, textAlign: 'center', fontSize: 20, color: '#EE3232', fontWeight: 'bold' }}>{state.data?.MensajeSugerido}</Text>
+                                        <Text style={{ paddingHorizontal: 14, textAlign: 'center', fontSize: 20, color: '#EE3232', fontWeight: 'bold' }}>{state.data?.Mensaje}</Text>
                                         <Button
                                             onPress={() => {
                                                 navigation.navigate('PaymentsScreen', state.data)
@@ -88,8 +87,14 @@ const HomeScreen = () => {
                                             buttonStyle={{ backgroundColor: '#004480', marginHorizontal: 10, marginTop: 12, marginBottom: 42, borderRadius: 9 }}
                                         />
                                     </View>
+
                                     :
-                                    <Text style={{ textAlign: 'center', padding: 20, fontSize: 20, color: '#148710', fontWeight: 'bold' }}>Su cuenta se encuentra al corriente.</Text>
+                                    state.AccountState?.EstatusRecibo == 3 || state.data == null
+                                        ?
+                                        <Text style={{ paddingHorizontal: 14, textAlign: 'center', fontSize: 20, color: '#EE3232', fontWeight: 'bold' }}>{state.data?.Mensaje}</Text>
+                                        :
+                                        <Text style={{ textAlign: 'center', padding: 20, fontSize: 20, color: '#148710', fontWeight: 'bold' }}>{state.data.Mensaje}</Text>
+
                             }
                         </View>
                     </View>
@@ -112,7 +117,6 @@ const HomeScreen = () => {
                                 <Text style={[styles.TextTable, { width: '50%', backgroundColor: colorTittle }]}>Fecha</Text>
                                 <Text style={[styles.TextTable, { width: '25%', backgroundColor: colorTittle }]}>Importe</Text>
                             </View>
-
                             {
                                 state.payments != null
                                     ?
@@ -122,7 +126,6 @@ const HomeScreen = () => {
                                     :
                                     null
                             }
-
                         </View>
                     </View>
 

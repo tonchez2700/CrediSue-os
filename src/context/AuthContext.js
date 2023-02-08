@@ -133,7 +133,6 @@ const tryAuth = async (email, password, dispatch) => {
   dispatch({ type: 'FETCHING_DATA', payload: { fetchingData: true } });
 
   const response = await httpClient.post('ws_entidad_credisuenos_users.php', { User: email, Pass: password })
-  console.log(response);
   if (response != null) {
     const user = {
       id_user: response[0].id_user,
@@ -157,6 +156,44 @@ const tryAuth = async (email, password, dispatch) => {
   }
 }
 
+const handleInputChange = (dispatch) => {
+  return async (value, typedata) => {
+      dispatch({
+          type: 'SET_ORDER_NUMBER',
+          payload: { value, typedata }
+      })
+  }
+}
+
+const recoveryUser = (dispatch) => {
+  return async (Email) => {
+    try {
+      const user = JSON.parse(await AsyncStorage.getItem('user'));
+      const token = user.token;
+      const data = {
+        User: Email,
+      }
+      const response = await httpClient.post('ws_entidad_credisuenos_users_recovery.php',
+        data,
+      );
+      if (response) {
+
+        Alert.alert(
+          'Advertencia',
+          'Verificar correo electronico asociado.'
+        );
+      } else {
+        Alert.alert(
+          'Advertencia',
+          'Error.'
+        );
+      }
+    } catch (error) {
+      console.log('Ha ocurrido un error al guardar el token: ', error.message)
+    }
+  }
+}
+
 const isVisibleModal = (dispatch) => {
   return async () => {
     dispatch({
@@ -169,6 +206,8 @@ export const { Context, Provider } = createDataContext(
   {
     signin,
     signout,
+    recoveryUser,
+    handleInputChange,
     clearState,
     tryLocalSignin,
     addUserNotificationToken,
